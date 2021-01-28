@@ -1,0 +1,73 @@
+body {
+  margin: 0;
+  font-family: sans-serif;
+  color: #eee;
+	background-color: #4B644A;
+}
+
+a {
+  text-decoration: none;
+  color: #ADFCF9;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+ul {
+  margin: 0;
+  padding: 1em;
+}
+
+li {
+  list-style: none;
+}
+
+.scores {
+  border-collapse: collapse;
+}
+
+.scores th,
+.scores td {
+  padding: .5em;
+  border-left: 1px solid #49393B;
+  border-right: 1px solid #49393B;
+  text-align: center;
+}
+
+.scores tbody th {
+  text-align: left;
+}
+
+.scores th:first-child,
+.scores td:first-child {
+  border-left: 0 none;
+}
+
+.scores th:last-child,
+.scores td:last-child {
+  border-right: 0 none;
+}
+
+.scores tr {
+  background-color: #341C1C;
+  color: #eee;
+}
+
+.scores tbody tr:nth-child(odd) {
+  background-color: #49393B;
+}
+
+.scores tbody tr:nth-child(even) {
+  background-color: #341C1C;
+}
+
+.scores tbody tr:nth-child(odd) td,
+.scores tbody tr:nth-child(odd) th {
+  border-color: #341C1C;
+}
+
+.scores tbody tr:nth-child(even) td,
+.scores tbody tr:nth-child(even) th {
+  border-color: #49393B;
+}
