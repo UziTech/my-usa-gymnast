@@ -61,7 +61,6 @@ module.exports = {
 		"comma-spacing": "error",
 		"comma-style": "error",
 		"comma-dangle": ["error", "always-multiline"],
-		"camelcase": "warn",
 		"computed-property-spacing": "error",
 		"eol-last": "warn",
 		"func-call-spacing": "error",
@@ -101,5 +100,7 @@ module.exports = {
 
 		"react/prop-types": "off",
 		"react/react-in-jsx-scope": "off",
+
+		"@typescript-eslint/no-var-requires": "off",
 	},
 };
