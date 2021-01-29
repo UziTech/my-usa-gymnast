@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/my-usa-gymnast/static/css/main.31762706.chunk.css",
+    "main.css": "/my-usa-gymnast/static/css/main.5c1f648c.chunk.css",
     "main.js": "/my-usa-gymnast/static/js/main.e6004250.chunk.js",
     "main.js.map": "/my-usa-gymnast/static/js/main.e6004250.chunk.js.map",
     "runtime-main.js": "/my-usa-gymnast/static/js/runtime-main.e2a61908.js",
@@ -8,13 +8,13 @@
     "static/js/2.e88fac74.chunk.js": "/my-usa-gymnast/static/js/2.e88fac74.chunk.js",
     "static/js/2.e88fac74.chunk.js.map": "/my-usa-gymnast/static/js/2.e88fac74.chunk.js.map",
     "index.html": "/my-usa-gymnast/index.html",
-    "static/css/main.31762706.chunk.css.map": "/my-usa-gymnast/static/css/main.31762706.chunk.css.map",
+    "static/css/main.5c1f648c.chunk.css.map": "/my-usa-gymnast/static/css/main.5c1f648c.chunk.css.map",
     "static/js/2.e88fac74.chunk.js.LICENSE.txt": "/my-usa-gymnast/static/js/2.e88fac74.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.e2a61908.js",
     "static/js/2.e88fac74.chunk.js",
-    "static/css/main.31762706.chunk.css",
+    "static/css/main.5c1f648c.chunk.css",
     "static/js/main.e6004250.chunk.js"
   ]
 }
