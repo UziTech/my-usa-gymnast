@@ -1,4 +1,4 @@
-// import React from "react";
+import {useEffect} from "react";
 import { useFetch } from "react-async";
 import {
 	SanctionProps,
@@ -45,10 +45,13 @@ function toDate(date: string): string {
 }
 
 export default function Sanction({person, id}: SanctionProps): JSX.Element {
-	const { data, error, isPending } = useFetch<sanctionData>(
+	const { data, error, isPending, run } = useFetch<sanctionData>(
 		`https://uzitech.com/cbp/?url=https://api.myusagym.com/v2/sanctions/${id}`,
 		{headers: { accept: "application/json" }},
+		{defer: true},
 	);
+
+	useEffect(() => { run(); }, [run]);
 
 	const sanction = person.sanctions[id];
 
@@ -60,13 +63,13 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 
 	if (error) {
 		return (
-			<li className="error">{error.message}</li>
+			<li className="error">{error.message}<br /><button onClick={run}>Refresh</button></li>
 		);
 	}
 
 	if (!data) {
 		return (
-			<li className="error">No data</li>
+			<li className="error">No data<br /><button onClick={run}>Refresh</button></li>
 		);
 	}
 
@@ -119,6 +122,12 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 		return 0;
 	});
 
+	const hasDifficulty = scores.some(s => s.difficulty);
+	const hasExecution = scores.some(s => s.execution);
+	const hasDeductions = scores.some(s => s.deductions);
+	const hasFinalScore = scores.some(s => s.finalScore);
+	const hasPlace = scores.some(s => s.place);
+
 	return (
 		<li className="sanction">
 			<h3 className="sanctionName">
@@ -138,12 +147,12 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 				<table>
 					<thead>
 						<tr>
-							<th></th>
-							<th>Difficulty</th>
-							<th>Execution</th>
-							<th>Deduction</th>
-							<th>Final</th>
-							<th>Place</th>
+							<th><button onClick={run}>Refresh</button></th>
+							{hasDifficulty ? <th>Difficulty</th> : null}
+							{hasExecution ? <th>Execution</th> : null}
+							{hasDeductions ? <th>Deduction</th> : null}
+							{hasFinalScore ? <th>Final</th> : null}
+							{hasPlace ? <th>Place</th> : null}
 						</tr>
 					</thead>
 					<tbody>
@@ -152,11 +161,11 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 							return (
 								<tr key={score.eventId}>
 									<th className="event">{score.eventId in order ? `${order[score.eventId]}. ` : ""}{event || `Unknown Event ${score.eventId}`}</th>
-									<td className="difficulty">{score.difficulty || ""}</td>
-									<td className="execution">{score.execution || ""}</td>
-									<td className="deductions">{score.deductions || ""}</td>
-									<td className="finalScore">{score.finalScore || ""}</td>
-									<td className="place">{score.place ? `${score.place} of ${totalSessionPeople}` : ""}</td>
+									{hasDifficulty ? <td className="difficulty">{score.difficulty || ""}</td> : null}
+									{hasExecution ? <td className="execution">{score.execution || ""}</td> : null}
+									{hasDeductions ? <td className="deductions">{score.deductions || ""}</td> : null}
+									{hasFinalScore ? <td className="finalScore">{score.finalScore || ""}</td> : null}
+									{hasPlace ? <td className="place">{score.place ? `${score.place} of ${totalSessionPeople}` : ""}</td> : null}
 								</tr>
 							);
 						})}
