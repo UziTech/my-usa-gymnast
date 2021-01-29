@@ -5,69 +5,75 @@ body {
 	background-color: #4B644A;
 }
 
+@media (min-width: 600px) {
+  body {
+    padding: 1em;
+  }
+}
+
 a {
   text-decoration: none;
   color: #ADFCF9;
-}
 
-a:hover {
-  text-decoration: underline;
+	&:hover {
+		text-decoration: underline;
+	}
 }
 
 ul {
   margin: 0;
-  padding: 1em;
+  padding: 0;
 }
 
 li {
   list-style: none;
 }
 
-.scores {
+table {
   border-collapse: collapse;
 }
 
-.scores th,
-.scores td {
-  padding: .5em;
-  border-left: 1px solid #49393B;
-  border-right: 1px solid #49393B;
-  text-align: center;
-}
+.scores {
+  width: 100%;
+  overflow-x: auto;
 
-.scores tbody th {
-  text-align: left;
-}
+  & tr {
+    background-color: #341C1C;
+    color: #eee;
+  }
 
-.scores th:first-child,
-.scores td:first-child {
-  border-left: 0 none;
-}
+  & th, td {
+    padding: .5em;
+    border-left: 1px solid #49393B;
+    border-right: 1px solid #49393B;
+    text-align: center;
 
-.scores th:last-child,
-.scores td:last-child {
-  border-right: 0 none;
-}
+    &:first-child {
+      border-left: 0 none;
+    }
 
-.scores tr {
-  background-color: #341C1C;
-  color: #eee;
-}
+    &:last-child {
+      border-right: 0 none;
+    }
+  }
 
-.scores tbody tr:nth-child(odd) {
-  background-color: #49393B;
-}
+  & tbody tr {
+    & th {
+      text-align: left;
+    }
 
-.scores tbody tr:nth-child(even) {
-  background-color: #341C1C;
-}
+    &:nth-child(odd) {
+      background-color: #49393B;
+      & th, td {
+        border-color: #341C1C;
+      }
+    }
 
-.scores tbody tr:nth-child(odd) td,
-.scores tbody tr:nth-child(odd) th {
-  border-color: #341C1C;
-}
-
-.scores tbody tr:nth-child(even) td,
-.scores tbody tr:nth-child(even) th {
-  border-color: #49393B;
+    &:nth-child(even) {
+      background-color: #341C1C;
+      & th, td {
+        border-color: #49393B;
+      }
+    }
+  }
 }

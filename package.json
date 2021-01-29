@@ -1,6 +1,6 @@
 {
   "name": "my-usa-gymnast",
-  "homepage": "https://UziTech.github.io/my-usa-gymnast",
+  "homepage": "https://uzitech.github.io/my-usa-gymnast",
   "version": "1.0.0",
   "private": true,
   "dependencies": {
@@ -40,6 +40,7 @@
     "pnp-webpack-plugin": "1.6.4",
     "postcss-flexbugs-fixes": "4.2.1",
     "postcss-loader": "3.0.0",
+    "postcss-nested": "4.2.3",
     "postcss-normalize": "8.0.1",
     "postcss-preset-env": "6.7.0",
     "postcss-safe-parser": "5.0.2",

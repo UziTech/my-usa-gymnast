@@ -134,33 +134,35 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 			<h3 className="level"><a href={`https://myusagym.com/meets/live/${id}/results/${sessionResultSet.resultSetId}/`}>Level {sanctionPeople.level} {sanctionPeople.division} {sanctionPeople.program} Session {sanctionPeople.sessionId} Squad {sanctionPeople.squad} Flight {sanctionPeople.flight}</a></h3>
 			<h5 className="date">{toDate(session.date)}<br />{sanction.time1}: {toTime(session.time1)}; {sanction.time2}: {toTime(session.time2)}; {sanction.time3}: {toTime(session.time3)}; {sanction.time4}: {toTime(session.time4)}</h5>
 			<a className="startList" href={`https://myusagym.com/meets/live/${id}/session/${sanctionPeople.sessionId}/startList/`}>Start List</a>
-			<table className="scores">
-				<thead>
-					<tr>
-						<th></th>
-						<th>Difficulty</th>
-						<th>Execution</th>
-						<th>Deduction</th>
-						<th>Final</th>
-						<th>Place</th>
-					</tr>
-				</thead>
-				<tbody>
-					{scores.map(score => {
-						const event = eventsByProgram[score.program]?.[score.eventId]?.longName;
-						return (
-							<tr key={score.eventId}>
-								<th className="event">{score.eventId in order ? `${order[score.eventId]}. ` : ""}{event || `Unknown Event ${score.eventId}`}</th>
-								<td className="difficulty">{score.difficulty || ""}</td>
-								<td className="execution">{score.execution || ""}</td>
-								<td className="deductions">{score.deductions || ""}</td>
-								<td className="finalScore">{score.finalScore || ""}</td>
-								<td className="place">{score.place ? `${score.place} of ${totalSessionPeople}` : ""}</td>
-							</tr>
-						);
-					})}
-				</tbody>
-			</table>
+			<div className="scores">
+				<table>
+					<thead>
+						<tr>
+							<th></th>
+							<th>Difficulty</th>
+							<th>Execution</th>
+							<th>Deduction</th>
+							<th>Final</th>
+							<th>Place</th>
+						</tr>
+					</thead>
+					<tbody>
+						{scores.map(score => {
+							const event = eventsByProgram[score.program]?.[score.eventId]?.longName;
+							return (
+								<tr key={score.eventId}>
+									<th className="event">{score.eventId in order ? `${order[score.eventId]}. ` : ""}{event || `Unknown Event ${score.eventId}`}</th>
+									<td className="difficulty">{score.difficulty || ""}</td>
+									<td className="execution">{score.execution || ""}</td>
+									<td className="deductions">{score.deductions || ""}</td>
+									<td className="finalScore">{score.finalScore || ""}</td>
+									<td className="place">{score.place ? `${score.place} of ${totalSessionPeople}` : ""}</td>
+								</tr>
+							);
+						})}
+					</tbody>
+				</table>
+			</div>
 		</li>
 	);
 }
