@@ -3,12 +3,7 @@ body {
   font-family: sans-serif;
   color: #eee;
 	background-color: #4B644A;
-}
-
-@media (min-width: 600px) {
-  body {
-    padding: 1em;
-  }
+  padding-right: 1em;
 }
 
 a {
@@ -22,7 +17,7 @@ a {
 
 ul {
   margin: 0;
-  padding: 0;
+  padding: 0 0 0 1em;
 }
 
 li {
@@ -75,5 +70,12 @@ table {
         border-color: #49393B;
       }
     }
+  }
+}
+
+@media (max-width: 600px) {
+  .scores {
+    margin-left: -2em;
+    width: calc(100% + 3em);
   }
 }
