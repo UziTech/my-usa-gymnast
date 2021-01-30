@@ -32,21 +32,21 @@ interface club {
 
 interface score {
 	eventId: string
-	sanctionId: number
-	place: string
-	rank: number
-	personId: number
-	resultSetId: number
-	clubId: number
-	attempt: string
-	difficulty: string|null
-	execution: string|null
-	deductions: string|null
-	finalScore: string|null
 	program: string
-	sessionId: string
-	level: string
-	division: string
+	sanctionId?: number
+	place?: string
+	rank?: number
+	personId?: number
+	resultSetId?: number
+	clubId?: number
+	attempt?: string
+	difficulty?: string|null
+	execution?: string|null
+	deductions?: string|null
+	finalScore?: string|null
+	sessionId?: string
+	level?: string
+	division?: string
 }
 
 type squad = "A"|"B"|"C"|"D"|"E"|"F"|"G"|"H"|"I"

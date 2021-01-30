@@ -101,7 +101,18 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 		o[e] = i + 1;
 		return o;
 	}, {});
-	const scores = person.scores.filter(s => s.sanctionId === id).sort((a, b) => {
+
+	const scores = person.scores.filter(s => s.sanctionId === id);
+	for (const event of Array.from(squadOrder)) {
+		const hasEventScore = scores.some(s => s.eventId === event);
+		if (!hasEventScore) {
+			scores.push({
+				eventId: event,
+				program: session.program,
+			});
+		}
+	}
+	scores.sort((a, b) => {
 		if (a.eventId in order && b.eventId in order) {
 			return order[a.eventId] - order[b.eventId];
 		}
@@ -116,6 +127,8 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 
 		return 0;
 	});
+
+
 
 	const hasDifficulty = scores.some(s => s.difficulty);
 	const hasExecution = scores.some(s => s.execution);
@@ -151,28 +164,19 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 						</tr>
 					</thead>
 					<tbody>
-						{scores.length > 0
-							? scores.map(score => {
-								const event = eventsByProgram[score.program]?.[score.eventId]?.longName;
-								return (
-									<tr key={score.eventId}>
-										<th className="event">{score.eventId in order ? `${order[score.eventId]}. ` : ""}{event || `Unknown Event ${score.eventId}`}</th>
-										{hasDifficulty ? <td className="difficulty">{score.difficulty || ""}</td> : null}
-										{hasExecution ? <td className="execution">{score.execution || ""}</td> : null}
-										{hasDeductions ? <td className="deductions">{score.deductions || ""}</td> : null}
-										{hasFinalScore ? <td className="finalScore">{score.finalScore || ""}</td> : null}
-										{hasPlace ? <td className="place">{score.place ? `${score.place} of ${totalSessionPeople}` : ""}</td> : null}
-									</tr>
-								);
-							})
-							: Array.from(squadOrder).map(eventId => {
-								const event = eventsByProgram[sanctionPeople.program]?.[eventId]?.longName;
-								return (
-									<tr key={eventId}>
-										<th className="event">{eventId in order ? `${order[eventId]}. ` : ""}{event || `Unknown Event ${eventId}`}</th>
-									</tr>
-								);
-							})}
+						{scores.map(score => {
+							const event = eventsByProgram[score.program]?.[score.eventId]?.longName;
+							return (
+								<tr key={score.eventId}>
+									<th className="event">{score.eventId in order ? `${order[score.eventId]}. ` : ""}{event || `Unknown Event ${score.eventId}`}</th>
+									{hasDifficulty ? <td className="difficulty">{score.difficulty || ""}</td> : null}
+									{hasExecution ? <td className="execution">{score.execution || ""}</td> : null}
+									{hasDeductions ? <td className="deductions">{score.deductions || ""}</td> : null}
+									{hasFinalScore ? <td className="finalScore">{score.finalScore || ""}</td> : null}
+									{hasPlace ? <td className="place">{score.place ? `${score.place} of ${totalSessionPeople}` : ""}</td> : null}
+								</tr>
+							);
+						})}
 					</tbody>
 				</table>
 			</div>
