@@ -87,7 +87,7 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 	const session = data.sessions.find(s => s.sessionId === sanctionPeople.sessionId);
 	if (!session) {
 		return (
-			<li className="error">Cannot find session</li>
+			<li className="error">Cannot find session<br /><button onClick={run}>Refresh</button></li>
 		);
 	}
 	const sessionResultSet = data.sessionResultSets.find(s =>
@@ -95,11 +95,6 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 		s.level === sanctionPeople.level &&
 		s.division === sanctionPeople.division,
 	);
-	if (!sessionResultSet) {
-		return (
-			<li className="error">Cannot find sessionResultSet</li>
-		);
-	}
 	const squad = `squad${sanctionPeople.squad}` as squadLetter;
 	const squadOrder = session[squad] || "";
 	const order = Array.from(squadOrder).reduce<{[event: string]: number}>((o, e, i) => {
@@ -140,7 +135,7 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 					{sanction.address1}, {sanction.city}, {sanction.state} {sanction.zip}
 				</a>
 			</h5>
-			<h3 className="level"><a href={`https://myusagym.com/meets/live/${id}/results/${sessionResultSet.resultSetId}/`}>Level {sanctionPeople.level} {sanctionPeople.division} {sanctionPeople.program} Session {sanctionPeople.sessionId} Squad {sanctionPeople.squad} Flight {sanctionPeople.flight}</a></h3>
+			<h3 className="level"><a href={sessionResultSet ? `https://myusagym.com/meets/live/${id}/results/${sessionResultSet.resultSetId}/` : `https://myusagym.com/meets/live/${id}/`}>Level {sanctionPeople.level} {sanctionPeople.division} {sanctionPeople.program} Session {sanctionPeople.sessionId} Squad {sanctionPeople.squad} Flight {sanctionPeople.flight}</a></h3>
 			<h5 className="date">{toDate(session.date)}<br />{sanction.time1}: {toTime(session.time1)}; {sanction.time2}: {toTime(session.time2)}; {sanction.time3}: {toTime(session.time3)}; {sanction.time4}: {toTime(session.time4)}</h5>
 			<a className="startList" href={`https://myusagym.com/meets/live/${id}/session/${sanctionPeople.sessionId}/startList/`}>Start List</a>
 			<div className="scores">
@@ -156,19 +151,28 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 						</tr>
 					</thead>
 					<tbody>
-						{scores.map(score => {
-							const event = eventsByProgram[score.program]?.[score.eventId]?.longName;
-							return (
-								<tr key={score.eventId}>
-									<th className="event">{score.eventId in order ? `${order[score.eventId]}. ` : ""}{event || `Unknown Event ${score.eventId}`}</th>
-									{hasDifficulty ? <td className="difficulty">{score.difficulty || ""}</td> : null}
-									{hasExecution ? <td className="execution">{score.execution || ""}</td> : null}
-									{hasDeductions ? <td className="deductions">{score.deductions || ""}</td> : null}
-									{hasFinalScore ? <td className="finalScore">{score.finalScore || ""}</td> : null}
-									{hasPlace ? <td className="place">{score.place ? `${score.place} of ${totalSessionPeople}` : ""}</td> : null}
-								</tr>
-							);
-						})}
+						{scores.length > 0
+							? scores.map(score => {
+								const event = eventsByProgram[score.program]?.[score.eventId]?.longName;
+								return (
+									<tr key={score.eventId}>
+										<th className="event">{score.eventId in order ? `${order[score.eventId]}. ` : ""}{event || `Unknown Event ${score.eventId}`}</th>
+										{hasDifficulty ? <td className="difficulty">{score.difficulty || ""}</td> : null}
+										{hasExecution ? <td className="execution">{score.execution || ""}</td> : null}
+										{hasDeductions ? <td className="deductions">{score.deductions || ""}</td> : null}
+										{hasFinalScore ? <td className="finalScore">{score.finalScore || ""}</td> : null}
+										{hasPlace ? <td className="place">{score.place ? `${score.place} of ${totalSessionPeople}` : ""}</td> : null}
+									</tr>
+								);
+							})
+							: Array.from(squadOrder).map(eventId => {
+								const event = eventsByProgram[sanctionPeople.program]?.[eventId]?.longName;
+								return (
+									<tr key={eventId}>
+										<th className="event">{eventId in order ? `${order[eventId]}. ` : ""}{event || `Unknown Event ${eventId}`}</th>
+									</tr>
+								);
+							})}
 					</tbody>
 				</table>
 			</div>
