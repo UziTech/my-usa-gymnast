@@ -1,4 +1,4 @@
-import {useEffect} from "react";
+import { useState, useEffect } from "react";
 import { useFetch } from "react-async";
 import {
 	SanctionProps,
@@ -41,19 +41,55 @@ function toDate(date: string): string {
 		return date;
 	}
 
-	return new Date(date).toDateString();
+	return toLocalDate(date).toDateString();
+}
+
+function toShortDate(date: string): string {
+	const match = date.match(/(\d\d\d\d)-(\d\d)-(\d\d)/);
+	if (!match) {
+		return date;
+	}
+
+	return toLocalDate(date).toLocaleDateString();
+}
+
+function toLocalDate(date: string) {
+	const datetime = new Date(date);
+	datetime.setUTCHours(datetime.getHours());
+	return datetime;
+}
+
+function isToday(startDate: string, endDate: string) {
+	if (toLocalDate(startDate).getTime() < Date.now()) {
+		const nextDay = new Date(endDate);
+		nextDay.setDate(nextDay.getDate() + 2);
+		return nextDay.getTime() > Date.now();
+	}
+	return false;
 }
 
 export default function Sanction({person, id}: SanctionProps): JSX.Element {
+	const [loaded, setLoaded] = useState(false);
 	const { data, error, isPending, run } = useFetch<sanctionData>(
 		`https://uzitech.com/cbp/?url=https://api.myusagym.com/v2/sanctions/${id}`,
 		{headers: { accept: "application/json" }},
 		{defer: true},
 	);
 
-	useEffect(() => { run(); }, [run]);
-
 	const sanction = person.sanctions[id];
+
+	useEffect(() => {
+		if (isToday(sanction.startDate, sanction.endDate)) {
+			setLoaded(true);
+			run();
+		}
+	}, [setLoaded, run, sanction]);
+
+	if (!loaded) {
+		return (
+			<li><button onClick={() => { setLoaded(true); run(); }}>Load {sanction.name} {toShortDate(sanction.startDate)}-{toShortDate(sanction.endDate)}</button></li>
+		);
+	}
 
 	if (isPending) {
 		return (
@@ -155,7 +191,7 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 				<table>
 					<thead>
 						<tr>
-							<th><button onClick={run}>Refresh</button></th>
+							<th></th>
 							{hasDifficulty ? <th>Difficulty</th> : null}
 							{hasExecution ? <th>Execution</th> : null}
 							{hasDeductions ? <th>Deduction</th> : null}
