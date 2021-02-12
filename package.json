@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@babel/core": "7.12.13",
+    "@babel/core": "7.12.16",
     "@babel/plugin-syntax-jsx": "^7.12.13",
     "@pmmmwh/react-refresh-webpack-plugin": "0.4.3",
     "@svgr/webpack": "5.5.0",
