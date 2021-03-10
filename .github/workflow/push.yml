@@ -1,6 +1,5 @@
 name: "tests"
 on:
-  pull_request:
   push:
     branches:
       - master
@@ -44,25 +43,6 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build
-
-  Automerge:
-    needs: [Test, Lint]
-    runs-on: ubuntu-latest
-    if: |
-      github.actor == 'dependabot[bot]' &&
-      github.event_name == 'pull_request'
-    steps:
-      - name: '@dependabot merge'
-        uses: actions/github-script@v3
-        with:
-          github-token: ${{ secrets.GH_TOKEN }}
-          script: |
-            await github.issues.createComment({
-              owner: context.payload.repository.owner.login,
-              repo: context.payload.repository.name,
-              issue_number: context.payload.pull_request.number,
-              body: '@dependabot merge'
-            })
 
   Skip:
     if: contains(github.event.head_commit.message, '[skip ci]')
