@@ -22,6 +22,10 @@ ul {
 
 li {
   list-style: none;
+
+	&.sanction-button {
+		padding: 10px 0;
+	}
 }
 
 table {
@@ -74,6 +78,10 @@ table {
 }
 
 @media (max-width: 600px) {
+  table {
+    width: 100%;
+  }
+
   .scores {
     margin-left: -2em;
     width: calc(100% + 3em);

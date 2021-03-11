@@ -33,7 +33,7 @@ export default function Person({id}: PersonProps): JSX.Element {
 		<li className="person">
 			<h1 className="name">{data.person.firstName} {data.person.lastName}</h1>
 			<h2 className="club">{data.club.name}</h2>
-			<ul>
+			<ul className="sanctions">
 				{Object.keys(data.sanctions).map(sanctionId =>
 					<Sanction key={sanctionId} person={data} id={+sanctionId} />,
 				)}
