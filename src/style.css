@@ -23,6 +23,7 @@ ul {
 li {
   list-style: none;
 
+  &.names-button,
 	&.sanction-button {
 		padding: 10px 0;
 	}

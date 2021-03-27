@@ -164,3 +164,7 @@ export interface eventsByProgramData {
 		} | undefined
 	} | undefined
 }
+
+export interface names {
+	[name: string]: number
+}
