@@ -1,6 +1,6 @@
 import { useFetch } from "react-async";
 import {
-	names,
+	namesData,
 } from "./types";
 
 function changeId(id: number) {
@@ -10,7 +10,7 @@ function changeId(id: number) {
 }
 
 export default function Names(): JSX.Element {
-	const { data, error, isPending } = useFetch<names>(
+	const { data, error, isPending } = useFetch<namesData>(
 		`${window.location.href}/names.json`,
 		{headers: { accept: "application/json" }},
 	);
@@ -33,11 +33,13 @@ export default function Names(): JSX.Element {
 		);
 	}
 
+	const names = Object.keys(data).sort();
+
 	return (
 		<div className="names">
 			<h2>Pick an Athlete:</h2>
 			<ul className="names">
-				{Object.keys(data).map((name) => {
+				{names.map((name) => {
 					return (
 						<li className="names-button" key={name}><button onClick={changeId(data[name])}>{name}</button></li>
 					);
