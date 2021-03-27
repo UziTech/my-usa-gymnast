@@ -37,7 +37,7 @@ module.exports = {
 		"default-case": "error",
 		"dot-location": ["error", "property"],
 		"eqeqeq": "error",
-		"no-console": "error",
+		"no-console": "warn",
 		"no-debugger": "warn",
 		"no-else-return": "warn",
 		"no-eval": "warn",
