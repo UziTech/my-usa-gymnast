@@ -26,6 +26,8 @@ const eventsByProgram: eventsByProgramData = {
 	},
 };
 
+const SHOW_DETAILED_SCORES = false;
+
 function toTime(time: string): string {
 	const match = time.match(/(\d\d):(\d\d):(\d\d)/);
 	if (!match) {
@@ -178,11 +180,11 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 		return 0;
 	});
 
-	const hasDifficulty = scores.some(s => s.difficulty);
-	const hasExecution = scores.some(s => s.execution);
-	const hasDeductions = scores.some(s => s.deductions);
-	const hasFinalScore = scores.some(s => s.finalScore);
-	const hasPlace = scores.some(s => s.place);
+	const showDifficulty = SHOW_DETAILED_SCORES && scores.some(s => s.difficulty);
+	const showExecution = SHOW_DETAILED_SCORES && scores.some(s => s.execution);
+	const showDeductions = SHOW_DETAILED_SCORES && scores.some(s => s.deductions);
+	const showFinalScore = scores.some(s => s.finalScore);
+	const showPlace = scores.some(s => s.place);
 
 	return (
 		<li className="sanction">
@@ -196,19 +198,28 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 					{sanction.address1}, {sanction.city}, {sanction.state} {sanction.zip}
 				</a>
 			</h5>
-			<h3 className="level"><a href={sessionResultSet ? `https://myusagym.com/meets/live/${id}/results/${sessionResultSet.resultSetId}/` : `https://myusagym.com/meets/live/${id}/`}>Level {sanctionPeople.level} {sanctionPeople.division} {sanctionPeople.program} Session {sanctionPeople.sessionId} Squad {sanctionPeople.squad} Flight {sanctionPeople.flight}</a></h3>
-			<h5 className="date">{toDate(session.date)}<br />{sanction.time1}: {toTime(session.time1)}; {sanction.time2}: {toTime(session.time2)}; {sanction.time3}: {toTime(session.time3)}; {sanction.time4}: {toTime(session.time4)}</h5>
-			<a className="startList" href={`https://myusagym.com/meets/live/${id}/session/${sanctionPeople.sessionId}/startList/`}>Start List</a>
+			<h3 className="level">Level {sanctionPeople.level}<br />{sanctionPeople.division}</h3>
+			<div className="date">
+				{toDate(session.date)}<br />
+				{toTime(session.time1)} {sanction.time1}<br />
+				{toTime(session.time2)} {sanction.time2}<br />
+				{toTime(session.time3)} {sanction.time3}<br />
+				{toTime(session.time4)} {sanction.time4}
+			</div>
+			<br />
+			{ sessionResultSet ? <a className="startList" href={`https://myusagym.com/meets/live/${id}/results/${sessionResultSet.resultSetId}/`}>All Scores</a> : null}
+			<br />
+			<br />
 			<div className="scores">
 				<table>
 					<thead>
 						<tr>
 							<th><button onClick={run} disabled={isPending}>Refresh</button></th>
-							{hasDifficulty ? <th>Difficulty</th> : null}
-							{hasExecution ? <th>Execution</th> : null}
-							{hasDeductions ? <th>Deduction</th> : null}
-							{hasFinalScore ? <th>Final</th> : null}
-							{hasPlace ? <th>Place</th> : null}
+							{showDifficulty ? <th>Difficulty</th> : null}
+							{showExecution ? <th>Execution</th> : null}
+							{showDeductions ? <th>Deduction</th> : null}
+							{showFinalScore ? <th>{SHOW_DETAILED_SCORES ? "Final" : "Score"}</th> : null}
+							{showPlace ? <th>Place</th> : null}
 						</tr>
 					</thead>
 					<tbody>
@@ -217,11 +228,11 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 							return (
 								<tr key={`${score.eventId} ${score.resultSetId}`}>
 									<th className="event">{score.eventId in order ? `${order[score.eventId]}. ` : ""}{event || `Unknown Event ${score.eventId}`}</th>
-									{hasDifficulty ? <td className="difficulty">{score.difficulty || ""}</td> : null}
-									{hasExecution ? <td className="execution">{score.execution || ""}</td> : null}
-									{hasDeductions ? <td className="deductions">{score.deductions || ""}</td> : null}
-									{hasFinalScore ? <td className="finalScore">{score.finalScore || ""}</td> : null}
-									{hasPlace ? <td className="place">{score.place ? `${score.place} of ${totalSessionPeople}` : ""}</td> : null}
+									{showDifficulty ? <td className="difficulty">{score.difficulty || ""}</td> : null}
+									{showExecution ? <td className="execution">{score.execution || ""}</td> : null}
+									{showDeductions ? <td className="deductions">{score.deductions || ""}</td> : null}
+									{showFinalScore ? <td className="finalScore">{score.finalScore || ""}</td> : null}
+									{showPlace ? <td className="place">{score.place ? `${score.place} of ${totalSessionPeople}` : ""}</td> : null}
 								</tr>
 							);
 						})}
