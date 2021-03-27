@@ -128,7 +128,7 @@ interface session {
 	program: string
 }
 
-interface sessionResultSets {
+interface sessionResultSet {
 	resultSetId: number
 	sessionId: string
 	sanctionId: number
@@ -148,7 +148,7 @@ interface sanctionClub {
 export interface sanctionData {
   sanction: sanction
   sessions: session[]
-  sessionResultSets: sessionResultSets[]
+  sessionResultSets: sessionResultSet[]
   people: {[index: string]: person}
   sanctionPeople: {[index: string]: sanctionPeople}
   clubs: {[index: string]: club}
