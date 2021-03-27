@@ -26,10 +26,11 @@ const eventsByProgram: eventsByProgramData = {
 	},
 };
 
-const SHOW_DETAILED_SCORES = false;
+const query = new URLSearchParams(window.location.search);
+const SHOW_DETAILED_SCORES = query.get("detail") !== null;
 
 function toTime(time: string): string {
-	const match = time.match(/(\d\d):(\d\d):(\d\d)/);
+	const match = time.match(/(\d\d):(\d\d)(?::\d\d)?/);
 	if (!match) {
 		return time;
 	}
@@ -207,7 +208,7 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 				<table>
 					<thead>
 						<tr>
-							<th><button onClick={run} disabled={isPending}>Refresh</button></th>
+							<th>{isPending ? "..." : <button onClick={run} disabled={isPending}>Refresh</button>}</th>
 							{showDifficulty ? <th>Difficulty</th> : null}
 							{showExecution ? <th>Execution</th> : null}
 							{showDeductions ? <th>Deduction</th> : null}
