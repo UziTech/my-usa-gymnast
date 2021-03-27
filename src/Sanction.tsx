@@ -55,15 +55,18 @@ function toShortDate(date: string): string {
 
 function toLocalDate(date: string) {
 	const datetime = new Date(date);
-	datetime.setUTCHours(datetime.getHours());
+	datetime.setHours(datetime.getUTCHours());
+	datetime.setDate(datetime.getDate() + 1);
 	return datetime;
 }
 
 function isToday(startDate: string, endDate: string) {
-	if (toLocalDate(startDate).getTime() < Date.now()) {
-		const nextDay = new Date(endDate);
-		nextDay.setDate(nextDay.getDate() + 2);
-		return nextDay.getTime() > Date.now();
+	const startDay = toLocalDate(startDate);
+	startDay.setDate(startDay.getDate() - 2);
+	if (startDay.getTime() < Date.now()) {
+		const endDay = new Date(endDate);
+		endDay.setDate(endDay.getDate() + 2);
+		return endDay.getTime() > Date.now();
 	}
 	return false;
 }
@@ -87,11 +90,11 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 
 	if (!loaded) {
 		return (
-			<li className="sanction-button"><button onClick={() => { setLoaded(true); run(); }}>Load {sanction.name} {toShortDate(sanction.startDate)}-{toShortDate(sanction.endDate)}</button></li>
+			<li className="sanction-button"><button onClick={() => { run(); setLoaded(true); }}>Load {sanction.name} {toShortDate(sanction.startDate)}-{toShortDate(sanction.endDate)}</button></li>
 		);
 	}
 
-	if (isPending) {
+	if (isPending && !data) {
 		return (
 			<li>Loading {sanction.name}...</li>
 		);
@@ -99,13 +102,13 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 
 	if (error) {
 		return (
-			<li className="error">{error.message}<br /><button onClick={run}>Refresh</button></li>
+			<li className="error">{error.message}<br /><button onClick={() => { run(); setLoaded(true); }}>Refresh</button></li>
 		);
 	}
 
 	if (!data) {
 		return (
-			<li className="error">No data<br /><button onClick={run}>Refresh</button></li>
+			<li className="error">No data<br /><button onClick={() => { run(); setLoaded(true); }}>Refresh</button></li>
 		);
 	}
 
@@ -123,7 +126,7 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 	const session = data.sessions.find(s => s.sessionId === sanctionPeople.sessionId);
 	if (!session) {
 		return (
-			<li className="error">Cannot find session<br /><button onClick={run}>Refresh</button></li>
+			<li className="error">Cannot find session<br /><button onClick={() => { run(); setLoaded(true); }}>Refresh</button></li>
 		);
 	}
 	const sessionResultSet = data.sessionResultSets.find(s =>
@@ -149,6 +152,10 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 		}
 	}
 	scores.sort((a, b) => {
+		if (a.resultSetId && b.resultSetId) {
+			return a.resultSetId - b.resultSetId;
+		}
+
 		if (a.eventId in order && b.eventId in order) {
 			return order[a.eventId] - order[b.eventId];
 		}
@@ -163,8 +170,6 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 
 		return 0;
 	});
-
-
 
 	const hasDifficulty = scores.some(s => s.difficulty);
 	const hasExecution = scores.some(s => s.execution);
@@ -191,7 +196,7 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 				<table>
 					<thead>
 						<tr>
-							<th></th>
+							<th><button onClick={() => { run(); }} disabled={isPending}>Refresh</button></th>
 							{hasDifficulty ? <th>Difficulty</th> : null}
 							{hasExecution ? <th>Execution</th> : null}
 							{hasDeductions ? <th>Deduction</th> : null}
@@ -203,7 +208,7 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 						{scores.map(score => {
 							const event = eventsByProgram[score.program]?.[score.eventId]?.longName;
 							return (
-								<tr key={score.eventId}>
+								<tr key={`${score.eventId} ${score.resultSetId}`}>
 									<th className="event">{score.eventId in order ? `${order[score.eventId]}. ` : ""}{event || `Unknown Event ${score.eventId}`}</th>
 									{hasDifficulty ? <td className="difficulty">{score.difficulty || ""}</td> : null}
 									{hasExecution ? <td className="execution">{score.execution || ""}</td> : null}
