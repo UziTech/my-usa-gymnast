@@ -84,10 +84,8 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 	const sanction = person.sanctions[id];
 
 	function hardReloadOnClick() {
-		return () => {
-			setLoaded(true);
-			run();
-		};
+		setLoaded(true);
+		run();
 	}
 
 	useEffect(() => {
