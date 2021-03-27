@@ -9,7 +9,7 @@ function changeId(id: number) {
 	};
 }
 
-export default function App(): JSX.Element {
+export default function Names(): JSX.Element {
 	const { data, error, isPending } = useFetch<names>(
 		`${window.location.href}/names.json`,
 		{headers: { accept: "application/json" }},

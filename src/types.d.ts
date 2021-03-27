@@ -2,6 +2,11 @@ export interface PersonProps {
 	id: number|string
 }
 
+export interface SearchProps {
+	search: number|string
+	name: string
+}
+
 interface person {
 	personId: number
 	firstName: string

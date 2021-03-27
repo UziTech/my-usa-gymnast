@@ -83,11 +83,6 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 
 	const sanction = person.sanctions[id];
 
-	function hardReloadOnClick() {
-		setLoaded(true);
-		run();
-	}
-
 	useEffect(() => {
 		if (isToday(sanction.startDate, sanction.endDate)) {
 			setLoaded(true);
@@ -97,7 +92,7 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 
 	if (!loaded) {
 		return (
-			<li className="sanction-button"><button onClick={hardReloadOnClick}>Load {sanction.name} {toShortDate(sanction.startDate)}-{toShortDate(sanction.endDate)}</button></li>
+			<li className="sanction-button"><button onClick={run}>Load {sanction.name} {toShortDate(sanction.startDate)}-{toShortDate(sanction.endDate)}</button></li>
 		);
 	}
 
@@ -109,13 +104,13 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 
 	if (error) {
 		return (
-			<li className="error">{error.message}<br /><button onClick={hardReloadOnClick}>Refresh</button></li>
+			<li className="error">{error.message}<br /><button onClick={run}>Refresh</button></li>
 		);
 	}
 
 	if (!data) {
 		return (
-			<li className="error">No data<br /><button onClick={hardReloadOnClick}>Refresh</button></li>
+			<li className="error">No data<br /><button onClick={run}>Refresh</button></li>
 		);
 	}
 
@@ -133,7 +128,7 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 	const session = data.sessions.find(s => s.sessionId === sanctionPeople.sessionId);
 	if (!session) {
 		return (
-			<li className="error">Cannot find session<br /><button onClick={hardReloadOnClick}>Refresh</button></li>
+			<li className="error">Cannot find session<br /><button onClick={run}>Refresh</button></li>
 		);
 	}
 	const sessionResultSet = data.sessionResultSets.find(s =>
