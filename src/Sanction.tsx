@@ -93,32 +93,32 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 
 	if (!loaded) {
 		return (
-			<li className="sanction-button"><button onClick={() => { setLoaded(true); run(); }}>Load {sanction.name} {toShortDate(sanction.startDate)}-{toShortDate(sanction.endDate)}</button></li>
+			<li className="sanction sanction-button"><button onClick={() => { setLoaded(true); run(); }}>Load {sanction.name} {toShortDate(sanction.startDate)}-{toShortDate(sanction.endDate)}</button></li>
 		);
 	}
 
 	if (isPending && !data) {
 		return (
-			<li><h3>Loading {sanction.name}...</h3></li>
+			<li className="sanction"><h3>Loading {sanction.name}...</h3></li>
 		);
 	}
 
 	if (error) {
 		return (
-			<li className="error"><h3>{error.message}</h3><button onClick={run}>Refresh</button></li>
+			<li className="sanction error"><h3>{error.message}</h3><button onClick={run}>Refresh</button></li>
 		);
 	}
 
 	if (!data) {
 		return (
-			<li className="error"><h3>No data</h3><button onClick={run}>Refresh</button></li>
+			<li className="sanction error"><h3>No data for {sanction.name}</h3><button onClick={run}>Refresh</button></li>
 		);
 	}
 
 	const sanctionPeople = person.sanctionPeople.find(s => s.sanctionId === id);
 	if (!sanctionPeople) {
 		return (
-			<li className="error">Cannot find sanctionPeople</li>
+			<li className="sanction error">Cannot find sanctionPeople</li>
 		);
 	}
 	const totalSessionPeople = Object.values(data.sanctionPeople).filter(s =>
@@ -129,7 +129,7 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 	const session = data.sessions.find(s => s.sessionId === sanctionPeople.sessionId);
 	if (!session) {
 		return (
-			<li className="error">Cannot find session<br /><button onClick={run}>Refresh</button></li>
+			<li className="sanction error">Cannot find session<br /><button onClick={run}>Refresh</button></li>
 		);
 	}
 	const sessionResultSet = data.sessionResultSets.find(s =>

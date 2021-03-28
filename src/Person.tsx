@@ -5,6 +5,8 @@ import {
 	personData,
 } from "./types";
 
+// const T = true;
+
 export default function Person({id}: PersonProps): JSX.Element {
 	const { data, error, isPending } = useFetch<personData>(
 		`https://uzitech.com/cbp/?url=https://api.myusagym.com/v2/people/${id}`,
@@ -13,19 +15,19 @@ export default function Person({id}: PersonProps): JSX.Element {
 
 	if (isPending) {
 		return (
-			<div>Loading...</div>
+			<div className="person">Loading...</div>
 		);
 	}
 
 	if (error) {
 		return (
-			<div className="error">{error.message}</div>
+			<div className="person error">{error.message}</div>
 		);
 	}
 
 	if (!data) {
 		return (
-			<div className="error">No data</div>
+			<div className="person error">No data for this person.</div>
 		);
 	}
 

@@ -3,8 +3,8 @@ export interface PersonProps {
 }
 
 export interface SearchProps {
-	search: number|string
-	name: string
+	search: number|string|null
+	name: string|null
 }
 
 interface person {
@@ -170,6 +170,7 @@ export interface eventsByProgramData {
 	} | undefined
 }
 
-export interface namesData {
-	[name: string]: number
+export interface peopleData {
+	name: string
+	id: number
 }

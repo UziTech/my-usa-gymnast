@@ -53,26 +53,29 @@ table {
   border-collapse: collapse;
 }
 
+.names {
+  padding: 0 1em;
+}
+
 .persons {
-  overflow: auto hidden;
+  overflow: auto;
   overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
+  height: 100vh;
+
+  display: flex;
+  flex-direction: row;
 
   @media (prefers-reduced-motion: no-preference) {
     scroll-behavior: smooth;
   }
 
-  block-size: 100%;
-
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: 100%;
-
   & .person {
-    padding: 0 1em;
-    scroll-snap-align: start;
-    overflow-y: auto;
-    overscroll-behavior-y: contain;
+    width: 100%;
+  	padding: 0 1em;
+  	scroll-snap-align: start;
+  	flex-shrink: 0;
+  	box-sizing: border-box;
   }
 }
 

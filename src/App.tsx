@@ -1,6 +1,5 @@
 import React from "react";
 import Person from "./Person";
-import Names from "./Names";
 import Search from "./Search";
 
 export default function App(): JSX.Element {
@@ -21,15 +20,15 @@ export default function App(): JSX.Element {
 		}
 	}
 
-	const search = query.get("search");
-	if (search) {
-		const name = query.get("name") || "";
-		return (
-			<Search search={search} name={name} />
-		);
+	const s = query.get("s");
+	let search = null;
+	let name = null;
+	if (s) {
+		const terms = s.split(" ");
+		search = terms.shift() as string;
+		name = terms.join(" ");
 	}
-
 	return (
-		<Names />
+		<Search search={search} name={name} />
 	);
 }
