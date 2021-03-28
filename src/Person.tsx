@@ -13,24 +13,24 @@ export default function Person({id}: PersonProps): JSX.Element {
 
 	if (isPending) {
 		return (
-			<li>Loading...</li>
+			<div>Loading...</div>
 		);
 	}
 
 	if (error) {
 		return (
-			<li className="error">{error.message}</li>
+			<div className="error">{error.message}</div>
 		);
 	}
 
 	if (!data) {
 		return (
-			<li className="error">No data</li>
+			<div className="error">No data</div>
 		);
 	}
 
 	return (
-		<li className="person">
+		<div className="person">
 			<h1 className="name">{data.person.firstName} {data.person.lastName}</h1>
 			<h2 className="club">{data.club.name}</h2>
 			<ul className="sanctions">
@@ -42,7 +42,7 @@ export default function Person({id}: PersonProps): JSX.Element {
 					<Sanction key={sanctionId} person={data} id={+sanctionId} />,
 				)}
 			</ul>
-		</li>
+		</div>
 	);
 }
 

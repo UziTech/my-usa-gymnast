@@ -208,7 +208,7 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 				<table>
 					<thead>
 						<tr>
-							<th>{isPending ? "..." : <button onClick={run} disabled={isPending}>Refresh</button>}</th>
+							<th><button onClick={run} className="refresh" disabled={isPending}>{isPending ? "..." : "Refresh"}</button></th>
 							{showDifficulty ? <th>Difficulty</th> : null}
 							{showExecution ? <th>Execution</th> : null}
 							{showDeductions ? <th>Deduction</th> : null}

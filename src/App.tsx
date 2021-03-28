@@ -10,13 +10,13 @@ export default function App(): JSX.Element {
 		const ids = id.split(",");
 		if (ids.length > 0) {
 			return (
-				<ul className="persons">
+				<div className="persons">
 					{ids.map(i => {
 						return (
 							<Person key={i} id={i} />
 						);
 					})}
-				</ul>
+				</div>
 			);
 		}
 	}
