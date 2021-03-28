@@ -93,25 +93,25 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 
 	if (!loaded) {
 		return (
-			<li className="sanction-button"><button onClick={run}>Load {sanction.name} {toShortDate(sanction.startDate)}-{toShortDate(sanction.endDate)}</button></li>
+			<li className="sanction-button"><button onClick={() => { setLoaded(true); run(); }}>Load {sanction.name} {toShortDate(sanction.startDate)}-{toShortDate(sanction.endDate)}</button></li>
 		);
 	}
 
 	if (isPending && !data) {
 		return (
-			<li>Loading {sanction.name}...</li>
+			<li><h3>Loading {sanction.name}...</h3></li>
 		);
 	}
 
 	if (error) {
 		return (
-			<li className="error">{error.message}<br /><button onClick={run}>Refresh</button></li>
+			<li className="error"><h3>{error.message}</h3><button onClick={run}>Refresh</button></li>
 		);
 	}
 
 	if (!data) {
 		return (
-			<li className="error">No data<br /><button onClick={run}>Refresh</button></li>
+			<li className="error"><h3>No data</h3><button onClick={run}>Refresh</button></li>
 		);
 	}
 
