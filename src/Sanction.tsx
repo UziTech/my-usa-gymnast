@@ -93,7 +93,7 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 
 	if (!loaded) {
 		return (
-			<li className="sanction sanction-button"><button onClick={() => { setLoaded(true); run(); }}>Load {sanction.name} {toShortDate(sanction.startDate)}-{toShortDate(sanction.endDate)}</button></li>
+			<li className="sanction sanction-button"><button onClick={() => { setLoaded(true); run(); }}>Load {sanction.name}<br />{toShortDate(sanction.startDate)}-{toShortDate(sanction.endDate)}</button></li>
 		);
 	}
 

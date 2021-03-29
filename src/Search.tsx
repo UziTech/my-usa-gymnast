@@ -66,10 +66,6 @@ export default function Search({search, name}: SearchProps): JSX.Element {
 
 	function changeCheckbox(id: number) {
 		return ({target}: {target: HTMLInputElement}) => {
-			if (!target) {
-				return;
-			}
-
 			if (target.checked) {
 				setChecked([...new Set([...checked, id])]);
 			} else {
@@ -80,11 +76,13 @@ export default function Search({search, name}: SearchProps): JSX.Element {
 
 	return (
 		<div className="names">
-			<h2>Pick an Athlete:</h2>
+			<h2>Pick your Athletes:</h2>
 			<ul>
 				{!people ? null : people.map(p => {
 					return (
-						<li className="names-checkbox" key={p.name}><label><input type="checkbox" checked={checked.includes(p.id)} onChange={changeCheckbox(p.id)} />{p.name}</label></li>
+						<li className="names-checkbox" key={p.name}>
+							<label><input type="checkbox" checked={checked.includes(p.id)} onChange={changeCheckbox(p.id)} />{p.name}</label>
+						</li>
 					);
 				})}
 			</ul>
