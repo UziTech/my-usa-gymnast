@@ -78,15 +78,18 @@ table {
 
   & .person {
   	padding: 0 1em;
-    margin-top: 20px;
   	scroll-snap-align: start;
   	box-sizing: border-box;
+
+    & .name {
+      text-align: center;
+    }
   }
 }
 
 .arrow {
-  position: absolute;
-  top: 0;
+  position: fixed;
+  top: 10px;
 	background-color: transparent;
 	border: 0 none;
   color: #fff;
