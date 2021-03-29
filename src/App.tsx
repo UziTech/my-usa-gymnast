@@ -42,7 +42,7 @@ export default function App(): JSX.Element {
 
 	function toggleArrows() {
 		if (persons.current) {
-			const padding = persons.current.clientWidth;
+			const padding = persons.current.clientWidth / 2;
 			setHasRight(persons.current.scrollWidth - persons.current.scrollLeft - padding >= persons.current.clientWidth);
 			setHasLeft(persons.current.scrollLeft - padding > 0);
 		}
