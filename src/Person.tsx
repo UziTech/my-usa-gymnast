@@ -32,22 +32,19 @@ export default function Person({id}: PersonProps): JSX.Element {
 	}
 
 	return (
-		<>
-			<div className="person">
-				<h1 className="name">{data.person.firstName} {data.person.lastName}</h1>
-				<h2 className="club">{data.club.name}</h2>
-				<ul className="sanctions">
-					{Object.keys(data.sanctions).sort((a, b) => {
-						const aDate = data.sanctions[a].startDate;
-						const bDate = data.sanctions[b].startDate;
-						return bDate.localeCompare(aDate);
-					}).map(sanctionId =>
-						<Sanction key={sanctionId} person={data} id={+sanctionId} />,
-					)}
-				</ul>
-			</div>
-			<div className="gap"></div>
-		</>
+		<div className="person">
+			<h1 className="name">{data.person.firstName} {data.person.lastName}</h1>
+			<h2 className="club">{data.club.name}</h2>
+			<ul className="sanctions">
+				{Object.keys(data.sanctions).sort((a, b) => {
+					const aDate = data.sanctions[a].startDate;
+					const bDate = data.sanctions[b].startDate;
+					return bDate.localeCompare(aDate);
+				}).map(sanctionId =>
+					<Sanction key={sanctionId} person={data} id={+sanctionId} />,
+				)}
+			</ul>
+		</div>
 	);
 }
 

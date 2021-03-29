@@ -67,28 +67,20 @@ table {
   scroll-snap-type: x mandatory;
   height: 100vh;
 
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 100%;
+  grid-column-gap: 5px;
 
   @media (prefers-reduced-motion: no-preference) {
     scroll-behavior: smooth;
   }
 
   & .person {
-    width: 100%;
   	padding: 0 1em;
     margin-top: 20px;
   	scroll-snap-align: start;
-  	flex-shrink: 0;
   	box-sizing: border-box;
-  }
-  & .gap {
-    width: 2px;
-    flex-shrink: 0;
-
-    &:last-child {
-      display: none;
-    }
   }
 }
 
