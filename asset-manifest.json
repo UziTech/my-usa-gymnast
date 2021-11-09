@@ -1,20 +1,20 @@
 {
   "files": {
     "main.css": "/my-usa-gymnast/static/css/main.25471308.chunk.css",
-    "main.js": "/my-usa-gymnast/static/js/main.fe38c255.chunk.js",
-    "main.js.map": "/my-usa-gymnast/static/js/main.fe38c255.chunk.js.map",
+    "main.js": "/my-usa-gymnast/static/js/main.5039ba26.chunk.js",
+    "main.js.map": "/my-usa-gymnast/static/js/main.5039ba26.chunk.js.map",
     "runtime-main.js": "/my-usa-gymnast/static/js/runtime-main.e2a61908.js",
     "runtime-main.js.map": "/my-usa-gymnast/static/js/runtime-main.e2a61908.js.map",
-    "static/js/2.7f1f5c28.chunk.js": "/my-usa-gymnast/static/js/2.7f1f5c28.chunk.js",
-    "static/js/2.7f1f5c28.chunk.js.map": "/my-usa-gymnast/static/js/2.7f1f5c28.chunk.js.map",
+    "static/js/2.67397e84.chunk.js": "/my-usa-gymnast/static/js/2.67397e84.chunk.js",
+    "static/js/2.67397e84.chunk.js.map": "/my-usa-gymnast/static/js/2.67397e84.chunk.js.map",
     "index.html": "/my-usa-gymnast/index.html",
     "static/css/main.25471308.chunk.css.map": "/my-usa-gymnast/static/css/main.25471308.chunk.css.map",
-    "static/js/2.7f1f5c28.chunk.js.LICENSE.txt": "/my-usa-gymnast/static/js/2.7f1f5c28.chunk.js.LICENSE.txt"
+    "static/js/2.67397e84.chunk.js.LICENSE.txt": "/my-usa-gymnast/static/js/2.67397e84.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.e2a61908.js",
-    "static/js/2.7f1f5c28.chunk.js",
+    "static/js/2.67397e84.chunk.js",
     "static/css/main.25471308.chunk.css",
-    "static/js/main.fe38c255.chunk.js"
+    "static/js/main.5039ba26.chunk.js"
   ]
 }
