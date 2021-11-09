@@ -99,6 +99,20 @@ interface sanction {
 	featuredEventId: string|null
 }
 
+export interface sanctionResult {
+	sanctionId: number
+  name: string
+  logoUrl: string|null
+  startDate: string
+  endDate: string
+  city: string
+  state: string
+  siteName: string
+  website: string
+  program: number
+  hasMeetInfo: 1|0
+}
+
 export interface personData {
   person: person
   club: club

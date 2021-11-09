@@ -16,6 +16,7 @@ function changeIds(ids: number[]) {
 export default function Search({search, name}: SearchProps): JSX.Element {
 	const [people, setPeople] = useState<peopleData[]>();
 	const [checked, setChecked] = useState<number[]>([]);
+	const [inputValue, setInputValue] = useState<string>("");
 	const { data, error, isPending, run } = useFetch<sanctionData>(
 		`https://uzitech.com/cbp/?url=https://api.myusagym.com/v2/sanctions/${search}`,
 		{headers: { accept: "application/json" }},
@@ -87,6 +88,11 @@ export default function Search({search, name}: SearchProps): JSX.Element {
 				})}
 			</ul>
 			<button onClick={changeIds(checked)}>Go</button>
+			<div style={{display: "hidden"}}>
+				<h2>or search</h2>
+				<input value={inputValue} onChange={(e) => setInputValue(e.target.value)} />
+				<button onClick={() => window.location.href = `?s=${inputValue}`}>Go</button>
+			</div>
 		</div>
 	);
 }

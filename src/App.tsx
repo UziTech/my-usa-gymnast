@@ -1,6 +1,7 @@
 import React, {useRef, useEffect, useState} from "react";
 import Person from "./Person";
 import Search from "./Search";
+import SearchSanction from "./SearchSanction";
 
 function throttle(func: (...args: unknown[]) => void, wait = 100) {
 	let waiting = false;
@@ -93,8 +94,19 @@ export default function App(): JSX.Element {
 		const terms = s.split(" ");
 		search = terms.shift() as string;
 		name = terms.join(" ");
+		if (isNaN(parseInt(search, 10))) {
+			name = `${search} ${name}`;
+			search = null;
+		}
 	}
+
+	if (search || !name) {
+		return (
+			<Search search={search} name={name} />
+		);
+	}
+
 	return (
-		<Search search={search} name={name} />
+		<SearchSanction name={name} />
 	);
 }
