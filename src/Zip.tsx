@@ -32,12 +32,12 @@ function distance(zip1: string, zip2: string) {
 	const to: zipLocation = zips[zip2.substring(0, 5) as keyof typeof zips];
 
 	if (!from) {
-		console.log(`No zip code '${zip1}'`);
+		// console.log(`No zip code '${zip1}'`);
 		return 0;
 	}
 
 	if (!to) {
-		console.log(`Cannot find zip '${zip2}'`);
+		// console.log(`Cannot find zip '${zip2}'`);
 		return Infinity;
 	}
 
@@ -49,14 +49,14 @@ function distance(zip1: string, zip2: string) {
 export default function Zip(): JSX.Element {
 	const [zip, setZip] = useState<string>("");
 
-	const clubs: clubType[] | null = zip.length !== 5 ? null : allClubs.map(c => {
+	const clubs: clubType[] = zip.match(/^\d{5}$/) ? allClubs.map(c => {
 		return {
 			...c,
 			distance: distance(zip, c.zip),
 		};
 	}).sort((a, b) => {
 		return a.distance - b.distance;
-	});
+	}) : [];
 
 	return (
 		<div className="zip">
@@ -67,13 +67,15 @@ export default function Zip(): JSX.Element {
 				</label>
 			</p>
 			<ul>
-				{!clubs ? null : clubs.map(c => {
-					return (
-						<li key={c.clubId}>
-							{c.name}; {c.city} {c.state} {c.zip}; {c.website ? <a href={c.website}>{c.website}</a> : null}
-						</li>
-					);
-				})}
+				{
+					clubs.map(c => {
+						return (
+							<li key={c.clubId}>
+								{c.name}; {c.city} {c.state} {c.zip}; {c.website ? <a href={c.website}>{c.website}</a> : null}
+							</li>
+						);
+					})
+				}
 			</ul>
 		</div>
 	);
