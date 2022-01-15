@@ -1,6 +1,7 @@
 import React, {useRef, useEffect, useState} from "react";
 import Person from "./Person";
 import Search from "./Search";
+import Zip from "./Zip";
 import SearchSanction from "./SearchSanction";
 
 function throttle(func: (...args: unknown[]) => void, wait = 100) {
@@ -85,6 +86,12 @@ export default function App(): JSX.Element {
 				</div>
 			);
 		}
+	}
+
+	if (query.get("zip")) {
+		return (
+			<Zip />
+		);
 	}
 
 	const s = query.get("s");
