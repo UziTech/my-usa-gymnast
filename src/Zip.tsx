@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 // import {
 // } from "./types";
 import clubObj from "./clubs.json";
@@ -28,22 +28,22 @@ interface clubType {
 }
 
 function distance(zip1: string, zip2: string) {
-  const from: zipLocation = zips[zip1.substring(0, 5) as keyof typeof zips];
-  const to: zipLocation = zips[zip2.substring(0, 5) as keyof typeof zips];
+	const from: zipLocation = zips[zip1.substring(0, 5) as keyof typeof zips];
+	const to: zipLocation = zips[zip2.substring(0, 5) as keyof typeof zips];
 
-  if (!from) {
-    console.log(`No zip code '${zip1}'`);
-    process.exit();
-  }
+	if (!from) {
+		console.log(`No zip code '${zip1}'`);
+		return 0;
+	}
 
-  if (!to) {
-    console.log(`Cannot find zip '${zip2}'`);
-    return Infinity;
-  }
+	if (!to) {
+		console.log(`Cannot find zip '${zip2}'`);
+		return Infinity;
+	}
 
-  const d = Math.sqrt((from.lat - to.lat) ** 2 + (from.lng - to.lng) ** 2)
+	const d = Math.sqrt((from.lat - to.lat) ** 2 + (from.lng - to.lng) ** 2);
 
-  return d;
+	return d;
 }
 
 export default function Zip(): JSX.Element {
@@ -55,8 +55,8 @@ export default function Zip(): JSX.Element {
 			distance: distance(zip, c.zip),
 		};
 	}).sort((a, b) => {
-    return a.distance - b.distance;
-  });
+		return a.distance - b.distance;
+	});
 
 	return (
 		<div className="zip">
