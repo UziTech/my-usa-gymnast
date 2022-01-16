@@ -71,7 +71,8 @@ export default function Zip(): JSX.Element {
 					clubs.map(c => {
 						return (
 							<li key={c.clubId}>
-								{c.name}; {c.city} {c.state} {c.zip}; {c.website ? <a href={c.website}>{c.website}</a> : null}
+								{c.name}<br />{c.address1}, {c.city}, {c.state} {c.zip}<br />{c.website ? <a href={c.website}>{c.website}</a> : null}
+								<hr />
 							</li>
 						);
 					})
