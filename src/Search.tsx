@@ -13,6 +13,10 @@ function changeIds(ids: number[]) {
 	};
 }
 
+function onSearch(q: string) {
+	window.location.href = `?${q.match(/^\d{5}$/) ? "zip" : "s"}=${q}`;
+}
+
 export default function Search({search, name}: SearchProps): JSX.Element {
 	const [people, setPeople] = useState<peopleData[]>();
 	const [checked, setChecked] = useState<number[]>([]);
@@ -91,7 +95,7 @@ export default function Search({search, name}: SearchProps): JSX.Element {
 			<div style={{display: "hidden"}}>
 				<h2>or search</h2>
 				<input value={inputValue} onChange={(e) => setInputValue(e.target.value)} />
-				<button onClick={() => window.location.href = `?s=${inputValue}`}>Go</button>
+				<button onClick={() => onSearch(inputValue)}>Go</button>
 			</div>
 		</div>
 	);

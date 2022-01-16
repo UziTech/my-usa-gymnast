@@ -88,7 +88,7 @@ export default function App(): JSX.Element {
 		}
 	}
 
-	if (query.get("zip")) {
+	if (query.has("zip")) {
 		return (
 			<Zip />
 		);
