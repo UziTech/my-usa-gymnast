@@ -188,3 +188,28 @@ export interface peopleData {
 	name: string
 	id: number
 }
+
+export interface ZipProps {
+	zipCode: string
+}
+
+export interface zipLocation {
+	lng: number
+	lat: number
+}
+
+export interface clubType {
+	clubId: number
+	name: string
+	shortName: string | null
+	address1: string
+	address2: string| null
+	city: string
+	state: string
+	zip: string
+	website: string | null
+	emailAddress: string | null
+	phone: number | null
+	fax: number | null
+	distance?: number
+}

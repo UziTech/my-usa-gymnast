@@ -1,31 +1,13 @@
 import { useState } from "react";
-// import {
-// } from "./types";
+import {
+	ZipProps,
+	clubType,
+	zipLocation,
+} from "./types";
 import clubObj from "./clubs.json";
 import zips from "./zips.json";
 
 const allClubs: clubType[] = Object.values(clubObj).filter(c => c.zip);
-
-interface zipLocation {
-	lng: number
-	lat: number
-}
-
-interface clubType {
-	clubId: number
-	name: string
-	shortName: string | null
-	address1: string
-	address2: string| null
-	city: string
-	state: string
-	zip: string
-	website: string | null
-	emailAddress: string | null
-	phone: number | null
-	fax: number | null
-	distance?: number
-}
 
 function distance(zip1: string, zip2: string) {
 	const from: zipLocation = zips[zip1.substring(0, 5) as keyof typeof zips];
@@ -45,9 +27,9 @@ function distance(zip1: string, zip2: string) {
 
 	return d;
 }
-
-export default function Zip(): JSX.Element {
-	const [zip, setZip] = useState<string>("");
+// get zip from location
+export default function Zip({zipCode}: ZipProps): JSX.Element {
+	const [zip, setZip] = useState<string>(zipCode);
 
 	const clubs: clubType[] = zip.match(/^\d{5}$/) ? allClubs.map(c => {
 		return {

@@ -89,8 +89,9 @@ export default function App(): JSX.Element {
 	}
 
 	if (query.has("zip")) {
+		const zip = query.get("zip");
 		return (
-			<Zip />
+			<Zip zipCode={zip || ""} />
 		);
 	}
 
