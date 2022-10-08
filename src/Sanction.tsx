@@ -205,8 +205,6 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 	const showFinalScore = scores.some(s => s.finalScore);
 	const showPlace = scores.some(s => s.place);
 
-	// eslint-disable-next-line
-	console.log(5, scores);
 	return (
 		<li className="sanction">
 			<h3 className="sanctionName">
