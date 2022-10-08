@@ -115,6 +115,7 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 		);
 	}
 
+	debugger;
 	const sanctionPeople = person.sanctionPeople.find(s => s.sanctionId === id);
 	if (!sanctionPeople) {
 		return (
