@@ -75,18 +75,18 @@ function isToday(startDate: string, endDate: string) {
 }
 
 const alias = [
-	["jr", "junior"],
-	["sr", "senior"],
+	...["", "a", "b", "c", "d"].map(l => [`jr ${l}`, `junior ${l}`]),
+	...["", "a", "b", "c", "d"].map(l => [`sr ${l}`, `senior ${l}`]),
 ].reduce((obj, arr, i) => {
 	for (const s of arr) {
-		obj[s.toLowerCase()] = i;
+		obj[s.toLowerCase().replace(/\s/g, "")] = i;
 	}
 	return obj;
 }, {} as {[index:string]: number});
 
 function isEqual(s1: string, s2: string) {
-	s1 = s1.toLowerCase();
-	s2 = s2.toLowerCase();
+	s1 = s1.toLowerCase().replace(/\s/g, "");
+	s2 = s2.toLowerCase().replace(/\s/g, "");
 	return (
 		s1 === s2 || (
 			s1 in alias &&
