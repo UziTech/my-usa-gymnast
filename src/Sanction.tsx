@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useFetch } from "react-async";
+import { useAsyncRetry } from "react-use";
 import {
 	SanctionProps,
 	sanctionData,
@@ -102,28 +102,38 @@ function isEqual(s1: string, s2: string) {
 
 export default function Sanction({person, id}: SanctionProps): JSX.Element {
 	const [loaded, setLoaded] = useState(false);
-	const { data, error, isPending, run } = useFetch<sanctionData>(
-		`https://uzitech.com/cbp/?url=https://api.myusagym.com/v2/sanctions/${id}`,
-		{headers: { accept: "application/json" }},
-		{defer: true},
-	);
+
+	const {value, error, loading, retry} = useAsyncRetry<sanctionData>(async () => {
+		if (loaded) {
+			const random = await fetch("http://www.randomnumberapi.com/api/v1.0/random?min=100&max=1000&count=1", {
+				headers: { accept: "application/json" },
+			}).then(r => r.json());
+			// eslint-disable-next-line no-console
+			console.log("random:", random);
+
+			const response = await fetch(`https://uzitech.com/cbp/?url=https://api.myusagym.com/v2/sanctions/${id}`, {
+				headers: { accept: "application/json" },
+			});
+			return await response.json();
+		}
+	}, [id]);
 
 	const sanction = person.sanctions[id];
 
 	useEffect(() => {
 		if (isToday(sanction.startDate, sanction.endDate)) {
 			setLoaded(true);
-			run();
+			retry();
 		}
-	}, [setLoaded, run, sanction]);
+	}, [setLoaded, retry, sanction]);
 
 	if (!loaded) {
 		return (
-			<li className="sanction sanction-button"><button onClick={() => { setLoaded(true); run(); }}>Load {sanction.name}<br />{toShortDate(sanction.startDate)}-{toShortDate(sanction.endDate)}</button></li>
+			<li className="sanction sanction-button"><button onClick={() => { setLoaded(true); retry(); }}>Load {sanction.name}<br />{toShortDate(sanction.startDate)}-{toShortDate(sanction.endDate)}</button></li>
 		);
 	}
 
-	if (isPending && !data) {
+	if (loading && !value) {
 		return (
 			<li className="sanction"><h3>Loading {sanction.name}...</h3></li>
 		);
@@ -131,13 +141,13 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 
 	if (error) {
 		return (
-			<li className="sanction error"><h3>{error.message}</h3><button onClick={run}>Refresh</button></li>
+			<li className="sanction error"><h3>{error.message}</h3><button onClick={retry}>Refresh</button></li>
 		);
 	}
 
-	if (!data) {
+	if (!value) {
 		return (
-			<li className="sanction error"><h3>No data for {sanction.name}</h3><button onClick={run}>Refresh</button></li>
+			<li className="sanction error"><h3>No data for {sanction.name}</h3><button onClick={retry}>Refresh</button></li>
 		);
 	}
 	const sanctionPeople = person.sanctionPeople.find(s => s.sanctionId === id);
@@ -147,19 +157,19 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 			<li className="sanction error">Cannot find sanctionPeople</li>
 		);
 	}
-	const totalSessionPeople = Object.values(data.sanctionPeople).filter(s =>
+	const totalSessionPeople = Object.values(value.sanctionPeople).filter(s =>
 		s.sessionId === sanctionPeople.sessionId &&
 		isEqual(s.level, sanctionPeople.level) &&
 		isEqual(s.division, sanctionPeople.division),
 	).length;
 
-	const session = data.sessions.find(s => s.sessionId === sanctionPeople.sessionId);
+	const session = value.sessions.find(s => s.sessionId === sanctionPeople.sessionId);
 	if (!session) {
 		return (
-			<li className="sanction error">Cannot find session<br /><button onClick={run}>Refresh</button></li>
+			<li className="sanction error">Cannot find session<br /><button onClick={retry}>Refresh</button></li>
 		);
 	}
-	const sessionResultSet = data.sessionResultSets.find(s =>
+	const sessionResultSet = value.sessionResultSets.find(s =>
 		s.sessionId === sanctionPeople.sessionId &&
 		isEqual(s.level, sanctionPeople.level) &&
 		isEqual(s.division, sanctionPeople.division),
@@ -237,7 +247,7 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 				<table>
 					<thead>
 						<tr>
-							<th><button onClick={run} className="refresh" disabled={isPending}>{isPending ? "..." : "Refresh"}</button></th>
+							<th><button onClick={retry} className="refresh" disabled={loading}>{loading ? "..." : "Refresh"}</button></th>
 							{showDifficulty ? <th>Difficulty</th> : null}
 							{showExecution ? <th>Execution</th> : null}
 							{showDeductions ? <th>Deduction</th> : null}
@@ -270,7 +280,7 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 https://api.myusagym.com/v2/sanctions/76009
 
 {
-  "sanction": {
+	"sanction": {
     "sanctionId": 76009,
     "name": "Twin Cities Invite",
     "startDate": "2021-01-23",
