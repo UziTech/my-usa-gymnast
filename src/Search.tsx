@@ -36,7 +36,7 @@ export default function Search({search, name}: SearchProps): JSX.Element {
 		} else {
 			setPeople(names);
 		}
-	}, [retry, setPeople, search]);
+	}, []);
 
 	if (loading) {
 		return (
