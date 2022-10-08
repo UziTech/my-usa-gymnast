@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useFetch } from "react-async";
+import { Z_FIXED } from "zlib";
 import {
 	SanctionProps,
 	sanctionData,
@@ -74,6 +75,22 @@ function isToday(startDate: string, endDate: string) {
 	return false;
 }
 
+const alias = [
+	["jr", "junior"],
+	["sr", "senior"],
+].reduce((obj, arr, i) => {
+	for (const s of arr) {
+		obj[s.toLowerCase()] = i;
+	}
+	return obj;
+}, {} as {[index:string]: number});
+
+function isEqual(s1: string, s2: string) {
+	s1 = s1.toLowerCase();
+	s2 = s2.toLowerCase();
+	return (s1 === s2 || alias[s1] === alias[s2]);
+}
+
 export default function Sanction({person, id}: SanctionProps): JSX.Element {
 	const [loaded, setLoaded] = useState(false);
 	const { data, error, isPending, run } = useFetch<sanctionData>(
@@ -123,8 +140,8 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 	}
 	const totalSessionPeople = Object.values(data.sanctionPeople).filter(s =>
 		s.sessionId === sanctionPeople.sessionId &&
-		s.level === sanctionPeople.level &&
-		s.division === sanctionPeople.division,
+		isEqual(s.level, sanctionPeople.level) &&
+		isEqual(s.division, sanctionPeople.division),
 	).length;
 
 	const session = data.sessions.find(s => s.sessionId === sanctionPeople.sessionId);
@@ -135,11 +152,10 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 	}
 	const sessionResultSet = data.sessionResultSets.find(s =>
 		s.sessionId === sanctionPeople.sessionId &&
-		s.level === sanctionPeople.level &&
-		s.division === sanctionPeople.division,
+		isEqual(s.level, sanctionPeople.level) &&
+		isEqual(s.division, sanctionPeople.division),
 	);
-	// eslint-disable-next-line
-	console.log(3, sanctionPeople, sessionResultSet, data.sessionResultSets);
+
 	const squad = `squad${sanctionPeople.squad}` as squadLetter;
 	const squadOrder = session[squad] || "";
 	const order = Array.from(squadOrder).reduce<{[event: string]: number}>((o, e, i) => {
