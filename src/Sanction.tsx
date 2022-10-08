@@ -117,7 +117,6 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 	const sanctionPeople = person.sanctionPeople.find(s => s.sanctionId === id);
 	// eslint-disable-next-line
 	console.log(1, sanctionPeople);
-	
 	if (!sanctionPeople) {
 		return (
 			<li className="sanction error">Cannot find sanctionPeople</li>
@@ -128,7 +127,6 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 		s.level === sanctionPeople.level &&
 		s.division === sanctionPeople.division,
 	).length;
-	
 	// eslint-disable-next-line
 	console.log(2, totalSessionPeople);
 	const session = data.sessions.find(s => s.sessionId === sanctionPeople.sessionId);
