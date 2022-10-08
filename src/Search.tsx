@@ -31,10 +31,12 @@ export default function Search({search, name}: SearchProps): JSX.Element {
 	});
 
 	useEffect(() => {
-		if (search && !data) {
-			retry();
-		} else {
-			setPeople(names);
+		if (!data) {
+			if (search) {
+				retry();
+			} else {
+				setPeople(names);
+			}
 		}
 	}, [retry, search, data]);
 
