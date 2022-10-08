@@ -114,9 +114,10 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 			<li className="sanction error"><h3>No data for {sanction.name}</h3><button onClick={run}>Refresh</button></li>
 		);
 	}
-	// eslint-disable-next-line
-	debugger;
 	const sanctionPeople = person.sanctionPeople.find(s => s.sanctionId === id);
+	// eslint-disable-next-line
+	console.log(1, sanctionPeople);
+	
 	if (!sanctionPeople) {
 		return (
 			<li className="sanction error">Cannot find sanctionPeople</li>
@@ -127,6 +128,9 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 		s.level === sanctionPeople.level &&
 		s.division === sanctionPeople.division,
 	).length;
+	
+	// eslint-disable-next-line
+	console.log(2, totalSessionPeople);
 	const session = data.sessions.find(s => s.sessionId === sanctionPeople.sessionId);
 	if (!session) {
 		return (
@@ -138,6 +142,8 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 		s.level === sanctionPeople.level &&
 		s.division === sanctionPeople.division,
 	);
+	// eslint-disable-next-line
+	console.log(3, sessionResultSet);
 	const squad = `squad${sanctionPeople.squad}` as squadLetter;
 	const squadOrder = session[squad] || "";
 	const order = Array.from(squadOrder).reduce<{[event: string]: number}>((o, e, i) => {
@@ -146,6 +152,8 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 	}, {});
 
 	const scores = person.scores.filter(s => s.sanctionId === id && s.resultSetId === sessionResultSet?.resultSetId);
+	// eslint-disable-next-line
+	console.log(4, scores, person.scores);
 	for (const event of Array.from(squadOrder)) {
 		const hasEventScore = scores.some(s => s.eventId === event);
 		if (!hasEventScore) {
@@ -181,6 +189,8 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 	const showFinalScore = scores.some(s => s.finalScore);
 	const showPlace = scores.some(s => s.place);
 
+	// eslint-disable-next-line
+	console.log(5, scores);
 	return (
 		<li className="sanction">
 			<h3 className="sanctionName">
