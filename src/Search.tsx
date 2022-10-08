@@ -28,7 +28,7 @@ export default function Search({search, name}: SearchProps): JSX.Element {
 		if (response.ok) {
 			return await response.json() as sanctionData;
 		}
-	}, [search]);
+	}, []);
 
 	useEffect(() => {
 		if (search) {
@@ -36,7 +36,7 @@ export default function Search({search, name}: SearchProps): JSX.Element {
 		} else {
 			setPeople(names);
 		}
-	}, []);
+	}, [retry, search]);
 
 	if (loading) {
 		return (
