@@ -77,6 +77,10 @@ function isToday(startDate: string, endDate: string) {
 const alias = [
 	...["", "a", "b", "c", "d"].map(l => [`jr ${l}`, `junior ${l}`]),
 	...["", "a", "b", "c", "d"].map(l => [`sr ${l}`, `senior ${l}`]),
+	["xb", "xl bronze", "bronze"],
+	["xs", "xl silver", "silver"],
+	["xg", "xl gold", "gold"],
+	["xp", "xl platinum", "platinum"],
 ].reduce((obj, arr, i) => {
 	for (const s of arr) {
 		obj[s.toLowerCase().replace(/\s/g, "")] = i;
