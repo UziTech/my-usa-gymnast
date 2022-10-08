@@ -88,7 +88,13 @@ const alias = [
 function isEqual(s1: string, s2: string) {
 	s1 = s1.toLowerCase();
 	s2 = s2.toLowerCase();
-	return (s1 === s2 || alias[s1] === alias[s2]);
+	return (
+		s1 === s2 || (
+			s1 in alias &&
+			s2 in alias &&
+			alias[s1] === alias[s2]
+		)
+	);
 }
 
 export default function Sanction({person, id}: SanctionProps): JSX.Element {
