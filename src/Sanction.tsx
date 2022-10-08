@@ -105,7 +105,7 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 
 	const {value, error, loading, retry} = useAsyncRetry<sanctionData>(async () => {
 		if (loaded) {
-			const random = await fetch("http://www.randomnumberapi.com/api/v1.0/random?min=100&max=1000&count=1", {
+			const random = await fetch("https://www.randomnumberapi.com/api/v1.0/random?min=100&max=1000&count=1", {
 				headers: { accept: "application/json" },
 			}).then(r => r.json());
 			// eslint-disable-next-line no-console
