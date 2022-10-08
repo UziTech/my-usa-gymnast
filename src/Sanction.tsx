@@ -114,7 +114,7 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 			<li className="sanction error"><h3>No data for {sanction.name}</h3><button onClick={run}>Refresh</button></li>
 		);
 	}
-
+	// eslint-disable-next-line
 	debugger;
 	const sanctionPeople = person.sanctionPeople.find(s => s.sanctionId === id);
 	if (!sanctionPeople) {
