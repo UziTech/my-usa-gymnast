@@ -28,15 +28,15 @@ export default function Search({search, name}: SearchProps): JSX.Element {
 		if (response.ok) {
 			return await response.json() as sanctionData;
 		}
-	}, []);
+	});
 
 	useEffect(() => {
-		if (search) {
+		if (search && !data) {
 			retry();
 		} else {
 			setPeople(names);
 		}
-	}, [retry, search]);
+	}, [retry, search, data]);
 
 	if (loading) {
 		return (
