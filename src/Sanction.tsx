@@ -103,7 +103,7 @@ function isEqual(s1: string, s2: string) {
 export default function Sanction({person, id}: SanctionProps): JSX.Element {
 	const [loaded, setLoaded] = useState(false);
 
-	const {value, error, loading, retry} = useAsyncRetry<sanctionData>(async () => {
+	const {value, error, loading, retry} = useAsyncRetry<[number, sanctionData] | undefined>(async () => {
 		if (loaded) {
 			const random = await fetch("https://www.randomnumberapi.com/api/v1.0/random?min=100&max=1000&count=1", {
 				headers: { accept: "application/json" },
@@ -114,7 +114,7 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 			const response = await fetch(`https://uzitech.com/cbp/?url=https://api.myusagym.com/v2/sanctions/${id}`, {
 				headers: { accept: "application/json" },
 			});
-			return await response.json();
+			return [random[0], await response.json()];
 		}
 	}, [id]);
 
@@ -150,6 +150,7 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 			<li className="sanction error"><h3>No data for {sanction.name}</h3><button onClick={retry}>Refresh</button></li>
 		);
 	}
+	const [num, data] = value;
 	const sanctionPeople = person.sanctionPeople.find(s => s.sanctionId === id);
 
 	if (!sanctionPeople) {
@@ -157,19 +158,19 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 			<li className="sanction error">Cannot find sanctionPeople</li>
 		);
 	}
-	const totalSessionPeople = Object.values(value.sanctionPeople).filter(s =>
+	const totalSessionPeople = Object.values(data.sanctionPeople).filter(s =>
 		s.sessionId === sanctionPeople.sessionId &&
 		isEqual(s.level, sanctionPeople.level) &&
 		isEqual(s.division, sanctionPeople.division),
 	).length;
 
-	const session = value.sessions.find(s => s.sessionId === sanctionPeople.sessionId);
+	const session = data.sessions.find(s => s.sessionId === sanctionPeople.sessionId);
 	if (!session) {
 		return (
 			<li className="sanction error">Cannot find session<br /><button onClick={retry}>Refresh</button></li>
 		);
 	}
-	const sessionResultSet = value.sessionResultSets.find(s =>
+	const sessionResultSet = data.sessionResultSets.find(s =>
 		s.sessionId === sanctionPeople.sessionId &&
 		isEqual(s.level, sanctionPeople.level) &&
 		isEqual(s.division, sanctionPeople.division),
@@ -247,7 +248,7 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 				<table>
 					<thead>
 						<tr>
-							<th><button onClick={retry} className="refresh" disabled={loading}>{loading ? "..." : "Refresh"}</button></th>
+							<th><button onClick={retry} className="refresh" disabled={loading}>{loading ? "..." : `Refresh ${num}`}</button></th>
 							{showDifficulty ? <th>Difficulty</th> : null}
 							{showExecution ? <th>Execution</th> : null}
 							{showDeductions ? <th>Deduction</th> : null}
