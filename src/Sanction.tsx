@@ -115,8 +115,7 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 		);
 	}
 	const sanctionPeople = person.sanctionPeople.find(s => s.sanctionId === id);
-	// eslint-disable-next-line
-	console.log(1, sanctionPeople);
+
 	if (!sanctionPeople) {
 		return (
 			<li className="sanction error">Cannot find sanctionPeople</li>
@@ -127,8 +126,7 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 		s.level === sanctionPeople.level &&
 		s.division === sanctionPeople.division,
 	).length;
-	// eslint-disable-next-line
-	console.log(2, totalSessionPeople);
+
 	const session = data.sessions.find(s => s.sessionId === sanctionPeople.sessionId);
 	if (!session) {
 		return (
@@ -141,7 +139,7 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 		s.division === sanctionPeople.division,
 	);
 	// eslint-disable-next-line
-	console.log(3, sessionResultSet);
+	console.log(3, sanctionPeople, sessionResultSet, data.sessionResultSets);
 	const squad = `squad${sanctionPeople.squad}` as squadLetter;
 	const squadOrder = session[squad] || "";
 	const order = Array.from(squadOrder).reduce<{[event: string]: number}>((o, e, i) => {
@@ -150,8 +148,7 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 	}, {});
 
 	const scores = person.scores.filter(s => s.sanctionId === id && s.resultSetId === sessionResultSet?.resultSetId);
-	// eslint-disable-next-line
-	console.log(4, scores, person.scores);
+
 	for (const event of Array.from(squadOrder)) {
 		const hasEventScore = scores.some(s => s.eventId === event);
 		if (!hasEventScore) {
