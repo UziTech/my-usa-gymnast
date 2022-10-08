@@ -103,18 +103,14 @@ function isEqual(s1: string, s2: string) {
 export default function Sanction({person, id}: SanctionProps): JSX.Element {
 	const [loaded, setLoaded] = useState(false);
 
-	const {value, error, loading, retry} = useAsyncRetry<[number, sanctionData] | undefined>(async () => {
+	const {value: data, error, loading, retry} = useAsyncRetry<sanctionData | undefined>(async () => {
 		if (loaded) {
-			const random = await fetch("https://www.randomnumberapi.com/api/v1.0/random?min=100&max=1000&count=1", {
-				headers: { accept: "application/json" },
-			}).then(r => r.json());
-			// eslint-disable-next-line no-console
-			console.log("random:", random);
-
 			const response = await fetch(`https://uzitech.com/cbp/?url=https://api.myusagym.com/v2/sanctions/${id}`, {
 				headers: { accept: "application/json" },
 			});
-			return [random[0], await response.json()];
+			if (response.ok) {
+				return await response.json() as sanctionData;
+			}
 		}
 	}, [id]);
 
@@ -133,7 +129,7 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 		);
 	}
 
-	if (loading && !value) {
+	if (loading && !data) {
 		return (
 			<li className="sanction"><h3>Loading {sanction.name}...</h3></li>
 		);
@@ -145,12 +141,12 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 		);
 	}
 
-	if (!value) {
+	if (!data) {
 		return (
 			<li className="sanction error"><h3>No data for {sanction.name}</h3><button onClick={retry}>Refresh</button></li>
 		);
 	}
-	const [num, data] = value;
+
 	const sanctionPeople = person.sanctionPeople.find(s => s.sanctionId === id);
 
 	if (!sanctionPeople) {
@@ -248,7 +244,7 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 				<table>
 					<thead>
 						<tr>
-							<th><button onClick={retry} className="refresh" disabled={loading}>{loading ? "..." : `Refresh ${num}`}</button></th>
+							<th><button onClick={retry} className="refresh" disabled={loading}>{loading ? "..." : "Refresh"}</button></th>
 							{showDifficulty ? <th>Difficulty</th> : null}
 							{showExecution ? <th>Execution</th> : null}
 							{showDeductions ? <th>Deduction</th> : null}

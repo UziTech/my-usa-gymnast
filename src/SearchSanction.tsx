@@ -1,15 +1,19 @@
-import { useFetch } from "react-async";
+import { useAsync } from "react-use";
 import {
 	sanctionResult,
 } from "./types";
 
 export default function SearchSanction({name}: {name: string}): JSX.Element {
-	const { data, error, isPending } = useFetch<sanctionResult[]>(
-		"https://uzitech.com/cbp/?url=https://api.myusagym.com/v1/meets/live",
-		{headers: { accept: "application/json" }},
-	);
+	const { value: data, error, loading } = useAsync<() => Promise<sanctionResult[] | undefined>>(async () => {
+		const response = await fetch("https://uzitech.com/cbp/?url=https://api.myusagym.com/v1/meets/live", {
+			headers: { accept: "application/json" },
+		});
+		if (response.ok) {
+			return await response.json() as sanctionResult[];
+		}
+	});
 
-	if (isPending) {
+	if (loading) {
 		return (
 			<div>Loading...</div>
 		);
