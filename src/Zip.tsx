@@ -29,29 +29,17 @@ function findClosestZip(zip: string) {
 	}
 }
 
-function distance(zip1: string, zip2: string) {
-	zip1 = zip1.substring(0, 5);
-	zip2 = zip2.substring(0, 5);
-	const zipFrom: string | undefined = findClosestZip(zip1);
-	const zipTo: string | undefined = findClosestZip(zip2);
-
-	if (!zipFrom) {
-		// eslint-disable-next-line no-console
-		console.log(`No zip code '${zip1}'`);
-		return 0;
-	} else if (zipFrom !== zip1) {
-		// eslint-disable-next-line no-console
-		console.log(`'${zipFrom}' used instead of '${zip1}'`);
-		alert(`'${zipFrom}' used instead of '${zip1}'`);
-	}
+function distance(zipFrom: string, zip: string) {
+	zip = zip.substring(0, 5);
+	const zipTo: string | undefined = findClosestZip(zip);
 
 	if (!zipTo) {
 		// eslint-disable-next-line no-console
-		console.log(`Cannot find zip '${zip2}'`);
+		console.log(`Cannot find zip '${zip}'`);
 		return Infinity;
-	} else if (zipTo !== zip2) {
+	} else if (zipTo !== zip) {
 		// eslint-disable-next-line no-console
-		console.log(`'${zipTo}' used instead of '${zip2}'`);
+		console.log(`'${zipTo}' used instead of '${zip}'`);
 	}
 
 	const from: zipLocation = zips[zipFrom as keyof typeof zips];
@@ -64,8 +52,12 @@ function distance(zip1: string, zip2: string) {
 // get zip from location
 export default function Zip({zipCode}: ZipProps): JSX.Element {
 	const [zip, setZip] = useState<string>(zipCode);
+	const zipFrom = findClosestZip(zip);
+	if (zipFrom !== zip) {
+		alert(`'${zipFrom}' used instead of '${zip}'`);
+	}
 
-	const clubs: clubType[] = zip.match(/^\d{5}$/) ? allClubs.map(c => {
+	const clubs: clubType[] = zipFrom ? allClubs.map(c => {
 		const validZip = c.zip.match(/^\d{5}/);
 		if (!validZip) {
 			// eslint-disable-next-line no-console
@@ -74,7 +66,7 @@ export default function Zip({zipCode}: ZipProps): JSX.Element {
 
 		return {
 			...c,
-			distance: validZip ? distance(zip, c.zip) : -1,
+			distance: validZip ? distance(zipFrom, c.zip) : -1,
 		};
 	}).filter(c => c.distance > -1).sort((a, b) => {
 		return a.distance - b.distance;
