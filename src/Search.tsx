@@ -97,8 +97,10 @@ export default function Search({search, name}: SearchProps): JSX.Element {
 			<button onClick={changeIds(checked)}>Go</button>
 			<div style={{display: "hidden"}}>
 				<h2>or search</h2>
-				<input value={inputValue} onChange={(e) => setInputValue(e.target.value)} />
-				<button onClick={() => onSearch(inputValue)}>Go</button>
+				<form onSubmit={(e) => e.preventDefault()}>
+					<input value={inputValue} onChange={(e) => setInputValue(e.target.value)} />
+					<button onClick={() => onSearch(inputValue)}>Go</button>
+				</form>
 			</div>
 		</div>
 	);
