@@ -61,10 +61,6 @@ export default function Zip({zipCode}: ZipProps): JSX.Element {
 		}
 	}, [zipFrom]);
 
-	if (zipFrom && zipFrom !== zip) {
-		alert(`'${zipFrom}' used instead of '${zip}'`);
-	}
-
 	const clubs: clubType[] = zipFrom ? allClubs.map(c => {
 		const validZip = c.zip.match(/^\d{5}/);
 		if (!validZip) {
