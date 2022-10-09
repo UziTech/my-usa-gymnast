@@ -104,7 +104,7 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 	const [loaded, setLoaded] = useState(false);
 
 	const {value: data, error, loading, retry} = useAsyncRetry<sanctionData | undefined>(async () => {
-		if (loaded) {
+		if (loaded && id) {
 			const response = await fetch(`https://uzitech.com/cbp/?url=https://api.myusagym.com/v2/sanctions/${id}`, {
 				headers: { accept: "application/json" },
 			});
@@ -112,7 +112,7 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 				return await response.json() as sanctionData;
 			}
 		}
-	}, [id]);
+	});
 
 	const sanction = person.sanctions[id];
 
@@ -121,7 +121,7 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 			setLoaded(true);
 			retry();
 		}
-	}, [setLoaded, retry, sanction]);
+	}, [retry, sanction]);
 
 	if (!loaded) {
 		return (

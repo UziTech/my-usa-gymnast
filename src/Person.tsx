@@ -9,13 +9,15 @@ import {
 
 export default function Person({id}: PersonProps): JSX.Element {
 	const {value: data, error, loading} = useAsync<() => Promise<personData | undefined>>(async () => {
-		const response = await fetch(`https://uzitech.com/cbp/?url=https://api.myusagym.com/v2/people/${id}`, {
-			headers: { accept: "application/json" },
-		});
-		if (response.ok) {
-			return await response.json() as personData;
+		if (id) {
+			const response = await fetch(`https://uzitech.com/cbp/?url=https://api.myusagym.com/v2/people/${id}`, {
+				headers: { accept: "application/json" },
+			});
+			if (response.ok) {
+				return await response.json() as personData;
+			}
 		}
-	}, [id]);
+	});
 
 	if (loading) {
 		return (

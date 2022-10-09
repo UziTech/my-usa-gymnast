@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useAsyncRetry } from "react-use";
+import { useAsync } from "react-use";
 import {
 	SearchProps,
 	sanctionData,
@@ -21,24 +21,22 @@ export default function Search({search, name}: SearchProps): JSX.Element {
 	const [people, setPeople] = useState<peopleData[]>();
 	const [checked, setChecked] = useState<number[]>([]);
 	const [inputValue, setInputValue] = useState<string>("");
-	const { value: data, error, loading, retry } = useAsyncRetry<sanctionData | undefined>(async () => {
-		const response = await fetch(`https://uzitech.com/cbp/?url=https://api.myusagym.com/v2/sanctions/${search}`, {
-			headers: { accept: "application/json" },
-		});
-		if (response.ok) {
-			return await response.json() as sanctionData;
+	const { value: data, error, loading } = useAsync<() => Promise<sanctionData | undefined>>(async () => {
+		if (search) {
+			const response = await fetch(`https://uzitech.com/cbp/?url=https://api.myusagym.com/v2/sanctions/${search}`, {
+				headers: { accept: "application/json" },
+			});
+			if (response.ok) {
+				return await response.json() as sanctionData;
+			}
 		}
 	});
 
 	useEffect(() => {
-		if (!data) {
-			if (search) {
-				retry();
-			} else {
-				setPeople(names);
-			}
+		if (!data && !search) {
+			setPeople(names);
 		}
-	}, [retry, search, data]);
+	}, [search, data]);
 
 	if (loading) {
 		return (
