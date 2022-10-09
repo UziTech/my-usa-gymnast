@@ -72,12 +72,17 @@ export default function Zip({zipCode}: ZipProps): JSX.Element {
 		return a.distance - b.distance;
 	}) : [];
 
+	function changeZip(newZip: string) {
+		window.history.replaceState({}, "", `https://uzitech.github.io/my-usa-gymnast/?zip=${newZip}`);
+		setZip(newZip);
+	}
+
 	return (
 		<div className="zip">
 			<p>
 				<label>
 					Enter a zip:
-					<input value={zip} onChange={(e) => setZip(e.target.value)} />
+					<input value={zip} onChange={(e) => changeZip(e.target.value)} />
 				</label>
 			</p>
 			<ul>
