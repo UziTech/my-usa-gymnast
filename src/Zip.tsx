@@ -89,7 +89,7 @@ export default function Zip({zipCode}: ZipProps): JSX.Element {
 						return (
 							<li key={c.clubId}>
 								<a href={`https://www.google.com/search?q=${encodeURIComponent(c.name)}`}>{c.name}</a><br />
-								{c.address1 ? <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fullAddress)}`}>{fullAddress}</a> : fullAddress}<br />
+								{c.address1 ? <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${c.name}, ${fullAddress}`)}`}>{fullAddress}</a> : fullAddress}<br />
 								{c.website ? <a href={c.website}>{c.website}</a> : null}
 								<hr />
 							</li>
