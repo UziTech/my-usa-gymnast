@@ -9,19 +9,53 @@ import zips from "./zips.json";
 
 const allClubs: clubType[] = Object.values(clubObj).filter(c => c.zip);
 
+function findClosestZip(zip: string) {
+	if (!zip.match(/^\d{5}$/)) {
+		// eslint-disable-next-line no-console
+		console.log(`'${zip}' is not 5 numbers`);
+
+		return;
+	}
+
+	for (let i = 0; i <= 10; i++) {
+		const sUp = (+zip + i).toString();
+		if (sUp in zips) {
+			return sUp;
+		}
+		const sDown = (+zip - i).toString();
+		if (sDown in zips) {
+			return sDown;
+		}
+	}
+}
+
 function distance(zip1: string, zip2: string) {
-	const from: zipLocation = zips[zip1.substring(0, 5) as keyof typeof zips];
-	const to: zipLocation = zips[zip2.substring(0, 5) as keyof typeof zips];
+	zip1 = zip1.substring(0, 5);
+	zip2 = zip2.substring(0, 5);
+	const zipFrom: string | undefined = findClosestZip(zip1);
+	const zipTo: string | undefined = findClosestZip(zip2);
 
-	if (!from) {
-		// console.log(`No zip code '${zip1}'`);
+	if (!zipFrom) {
+		// eslint-disable-next-line no-console
+		console.log(`No zip code '${zip1}'`);
 		return 0;
+	} else if (zipFrom !== zip1) {
+		// eslint-disable-next-line no-console
+		console.log(`'${zipFrom}' used instead of '${zip1}'`);
+		alert(`'${zipFrom}' used instead of '${zip1}'`);
 	}
 
-	if (!to) {
-		// console.log(`Cannot find zip '${zip2}'`);
+	if (!zipTo) {
+		// eslint-disable-next-line no-console
+		console.log(`Cannot find zip '${zip2}'`);
 		return Infinity;
+	} else if (zipTo !== zip2) {
+		// eslint-disable-next-line no-console
+		console.log(`'${zipTo}' used instead of '${zip2}'`);
 	}
+
+	const from: zipLocation = zips[zipFrom as keyof typeof zips];
+	const to: zipLocation = zips[zipTo as keyof typeof zips];
 
 	const d = Math.sqrt((from.lat - to.lat) ** 2 + (from.lng - to.lng) ** 2);
 
