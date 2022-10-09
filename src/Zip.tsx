@@ -85,7 +85,7 @@ export default function Zip({zipCode}: ZipProps): JSX.Element {
 			<p>
 				<label>
 					Enter a zip:
-					<input value={zip} onChange={(e) => setZip(e.target.value)} />
+					<input value={zipFrom ?? zip} onChange={(e) => setZip(e.target.value)} />
 				</label>
 			</p>
 			<ul>
