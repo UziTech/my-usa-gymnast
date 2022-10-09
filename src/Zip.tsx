@@ -18,11 +18,11 @@ function findClosestZip(zip: string) {
 	}
 
 	for (let i = 0; i <= 10; i++) {
-		const sUp = (+zip + i).toString();
+		const sUp = (+zip + i).toString().padStart(5, "0");
 		if (sUp in zips) {
 			return sUp;
 		}
-		const sDown = (+zip - i).toString();
+		const sDown = (+zip - i).toString().padStart(5, "0");
 		if (sDown in zips) {
 			return sDown;
 		}
@@ -66,7 +66,7 @@ export default function Zip({zipCode}: ZipProps): JSX.Element {
 	const [zip, setZip] = useState<string>(zipCode);
 
 	const clubs: clubType[] = zip.match(/^\d{5}$/) ? allClubs.map(c => {
-		const validZip = c.zip.match(/^[1-9]\d{4}/);
+		const validZip = c.zip.match(/^\d{5}/);
 		if (!validZip) {
 			// eslint-disable-next-line no-console
 			console.log("Not valid zip", c);
