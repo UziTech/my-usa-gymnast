@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
 	ZipProps,
 	clubType,
@@ -52,7 +52,15 @@ function distance(zipFrom: string, zip: string) {
 // get zip from location
 export default function Zip({zipCode}: ZipProps): JSX.Element {
 	const [zip, setZip] = useState<string>(zipCode);
-	const zipFrom = zip.length === 5 ? findClosestZip(zip) : null;
+	let undef;
+	const zipFrom = zip.match(/^\d{5}$/) ? findClosestZip(zip) : undef;
+
+	useEffect(() => {
+		if (zipFrom) {
+			window.history.replaceState({}, "", `https://uzitech.github.io/my-usa-gymnast/?zip=${zipFrom}`);
+		}
+	}, [zipFrom]);
+
 	if (zipFrom && zipFrom !== zip) {
 		alert(`'${zipFrom}' used instead of '${zip}'`);
 	}
@@ -72,17 +80,12 @@ export default function Zip({zipCode}: ZipProps): JSX.Element {
 		return a.distance - b.distance;
 	}) : [];
 
-	function changeZip(newZip: string) {
-		window.history.replaceState({}, "", `https://uzitech.github.io/my-usa-gymnast/?zip=${newZip}`);
-		setZip(newZip);
-	}
-
 	return (
 		<div className="zip">
 			<p>
 				<label>
 					Enter a zip:
-					<input value={zip} onChange={(e) => changeZip(e.target.value)} />
+					<input value={zip} onChange={(e) => setZip(e.target.value)} />
 				</label>
 			</p>
 			<ul>
