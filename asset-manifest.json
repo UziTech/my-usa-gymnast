@@ -1,20 +1,13 @@
 {
   "files": {
-    "main.css": "/my-usa-gymnast/static/css/main.7c3afdf1.chunk.css",
-    "main.js": "/my-usa-gymnast/static/js/main.717b768f.chunk.js",
-    "main.js.map": "/my-usa-gymnast/static/js/main.717b768f.chunk.js.map",
-    "runtime-main.js": "/my-usa-gymnast/static/js/runtime-main.70d0e3f4.js",
-    "runtime-main.js.map": "/my-usa-gymnast/static/js/runtime-main.70d0e3f4.js.map",
-    "static/js/2.3171ae5f.chunk.js": "/my-usa-gymnast/static/js/2.3171ae5f.chunk.js",
-    "static/js/2.3171ae5f.chunk.js.map": "/my-usa-gymnast/static/js/2.3171ae5f.chunk.js.map",
+    "main.css": "/my-usa-gymnast/static/css/main.2fc02ee4.css",
+    "main.js": "/my-usa-gymnast/static/js/main.2341381e.js",
     "index.html": "/my-usa-gymnast/index.html",
-    "static/css/main.7c3afdf1.chunk.css.map": "/my-usa-gymnast/static/css/main.7c3afdf1.chunk.css.map",
-    "static/js/2.3171ae5f.chunk.js.LICENSE.txt": "/my-usa-gymnast/static/js/2.3171ae5f.chunk.js.LICENSE.txt"
+    "main.2fc02ee4.css.map": "/my-usa-gymnast/static/css/main.2fc02ee4.css.map",
+    "main.2341381e.js.map": "/my-usa-gymnast/static/js/main.2341381e.js.map"
   },
   "entrypoints": [
-    "static/js/runtime-main.70d0e3f4.js",
-    "static/js/2.3171ae5f.chunk.js",
-    "static/css/main.7c3afdf1.chunk.css",
-    "static/js/main.717b768f.chunk.js"
+    "static/css/main.2fc02ee4.css",
+    "static/js/main.2341381e.js"
   ]
 }
