@@ -120,11 +120,11 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 		// eslint-disable-next-line no-console
 		console.log("useEffect");
 
-		if (isToday(sanction.startDate, sanction.endDate)) {
+		if (!data && isToday(sanction.startDate, sanction.endDate)) {
 			setLoaded(true);
 			retry();
 		}
-	}, [retry, sanction]);
+	}, [retry, sanction, data]);
 
 	if (!loaded) {
 		return (
