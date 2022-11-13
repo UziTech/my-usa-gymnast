@@ -117,11 +117,13 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 	const sanction = person.sanctions[id];
 
 	useEffect(() => {
-		if (!loaded && isToday(sanction.startDate, sanction.endDate)) {
+		console.log("useEffect");
+
+		if (isToday(sanction.startDate, sanction.endDate)) {
 			setLoaded(true);
 			retry();
 		}
-	}, [retry, sanction, loaded]);
+	}, [retry, sanction]);
 
 	if (!loaded) {
 		return (
