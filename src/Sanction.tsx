@@ -117,9 +117,6 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 	const sanction = person.sanctions[id];
 
 	useEffect(() => {
-		// eslint-disable-next-line no-console
-		console.log("useEffect");
-
 		if (!data && isToday(sanction.startDate, sanction.endDate)) {
 			setLoaded(true);
 			retry();
