@@ -4,75 +4,33 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@babel/core": "7.18.5",
-    "@babel/plugin-syntax-jsx": "^7.17.12",
-    "@pmmmwh/react-refresh-webpack-plugin": "0.5.7",
-    "@svgr/webpack": "6.2.1",
-    "@types/node": "^16.11.41",
-    "@types/react": "^18.0.14",
-    "@types/react-dom": "^18.0.5",
-    "@typescript-eslint/eslint-plugin": "^5.7.0",
-    "@typescript-eslint/parser": "^5.7.0",
-    "babel-eslint": "^10.1.0",
-    "babel-loader": "8.2.5",
-    "babel-plugin-named-asset-import": "^0.3.8",
-    "babel-preset-react-app": "^10.0.1",
-    "bfj": "^7.0.2",
-    "browserslist": "^4.21.0",
-    "camelcase": "^7.0.0",
-    "case-sensitive-paths-webpack-plugin": "2.4.0",
-    "css-loader": "5.2.7",
-    "dotenv": "16.0.1",
-    "dotenv-expand": "8.0.3",
-    "eslint": "^8.18.0",
-    "eslint-config-react-app": "^7.0.1",
-    "eslint-plugin-flowtype": "^8.0.3",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jsx-a11y": "^6.6.0",
-    "eslint-plugin-react": "^7.27.1",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-webpack-plugin": "^3.2.0",
-    "file-loader": "6.2.0",
-    "fs-extra": "^10.1.0",
-    "html-webpack-plugin": "4.5.2",
-    "identity-obj-proxy": "3.0.0",
-    "mini-css-extract-plugin": "1.6.2",
-    "optimize-css-assets-webpack-plugin": "6.0.1",
-    "pnp-webpack-plugin": "1.7.0",
-    "postcss": "^8.4.14",
-    "postcss-flexbugs-fixes": "5.0.2",
-    "postcss-loader": "4.3.0",
-    "postcss-nested": "5.0.6",
-    "postcss-normalize": "10.0.1",
-    "postcss-preset-env": "7.7.2",
-    "postcss-safe-parser": "6.0.0",
-    "prompts": "2.4.2",
-    "react": "^17.0.2",
-    "react-app-polyfill": "^3.0.0",
-    "react-dev-utils": "^11.0.4",
-    "react-dom": "^17.0.2",
-    "react-refresh": "^0.14.0",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^16.18.3",
+    "@types/react": "^18.0.25",
+    "@types/react-dom": "^18.0.8",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1",
     "react-use": "^17.4.0",
-    "resolve": "1.22.1",
-    "resolve-url-loader": "^5.0.0",
-    "sass-loader": "12.6.0",
-    "semver": "7.3.7",
-    "style-loader": "3.3.1",
-    "terser-webpack-plugin": "4.2.3",
-    "ts-pnp": "1.2.0",
-    "typescript": "^4.7.4",
-    "url-loader": "4.1.1",
-    "webpack": "4.46.0",
-    "webpack-dev-server": "4.9.2",
-    "webpack-manifest-plugin": "2.2.0",
-    "workbox-webpack-plugin": "6.5.3"
+    "typescript": "^4.8.4",
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "node scripts/start.js",
-    "build": "node scripts/build.js",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
     "test": "npm run lint",
     "lint": "eslint .",
-    "fix": "npm run lint -- --fix"
+    "fix": "npm run lint -- --fix",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
   },
   "browserslist": {
     "production": [
@@ -84,11 +42,6 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
-    ]
-  },
-  "babel": {
-    "presets": [
-      "react-app"
     ]
   }
 }
