@@ -1,0 +1,172 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  color: #eee;
+	background-color: #4B644A;
+}
+
+a {
+  text-decoration: none;
+  color: #ADFCF9;
+
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
+button {
+	padding: 10px;
+	border: 2px solid #666;
+	border-radius: 6px;
+	background: #ccc;
+
+	&:active {
+		background: #aaa;
+	}
+
+  &:disabled {
+    color: #000;
+  }
+}
+
+.refresh {
+  min-width: 72px;
+  padding: 2px 10px;
+}
+
+ul {
+  margin: 0;
+  padding: 0 0 0 1em;
+}
+
+li {
+  list-style: none;
+}
+
+.names-checkbox {
+  padding: 10px 0;
+}
+
+.sanction-button {
+  text-align: center;
+  padding: 10px 0;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+.names {
+  padding: 0 1em;
+}
+
+.persons {
+  overflow: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  height: 100vh;
+
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 100%;
+  grid-column-gap: 5px;
+
+  @media (prefers-reduced-motion: no-preference) {
+    scroll-behavior: smooth;
+  }
+
+  & .person {
+  	padding: 0 1em;
+  	scroll-snap-align: start;
+  	box-sizing: border-box;
+
+    & .name {
+      text-align: center;
+    }
+  }
+}
+
+.arrow {
+  position: fixed;
+  top: 10px;
+	background-color: transparent;
+	border: 0 none;
+  color: #fff;
+	font-weight: bold;
+	font-size: 30px;
+  outline: none;
+  transition: opacity .15s;
+
+  &:active {
+    background-color: transparent;
+  }
+
+  &.hide {
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  &.left {
+    left: 20px;
+  }
+  &.right {
+    right: 20px;
+  }
+}
+
+.scores {
+  width: 100%;
+  overflow-x: auto;
+
+  & tr {
+    background-color: #341C1C;
+    color: #eee;
+  }
+
+  & th, td {
+    padding: .5em;
+    border-left: 1px solid #49393B;
+    border-right: 1px solid #49393B;
+    text-align: center;
+
+    &:first-child {
+      border-left: 0 none;
+    }
+
+    &:last-child {
+      border-right: 0 none;
+    }
+  }
+
+  & tbody tr {
+    & th {
+      text-align: left;
+    }
+
+    &:nth-child(odd) {
+      background-color: #49393B;
+      & th, td {
+        border-color: #341C1C;
+      }
+    }
+
+    &:nth-child(even) {
+      background-color: #341C1C;
+      & th, td {
+        border-color: #49393B;
+      }
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  table {
+    width: 100%;
+  }
+
+  .scores {
+    margin-left: -2em;
+    width: calc(100% + 3em);
+  }
+}
