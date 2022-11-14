@@ -7,37 +7,36 @@ on:
 
 jobs:
 
-  Test:
+  Build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
       - name: Install Dependencies
-        run: yarn
-      - name: Run Tests 👩🏽‍💻
-        run: yarn build
+        run: npm install
+      - name: Build 🗜️
+        run: npm run build
 
-  # # test is just lint
-  # Lint:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout Code
-  #       uses: actions/checkout@v3
-  #     - name: Install Dependencies
-  #       run: yarn
-  #     - name: Lint ✨
-  #       run: yarn lint
+  Lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: npm install
+      - name: Lint ✨
+        run: npm run lint
 
   Deploy:
-    needs: [Test]
+    needs: [Build, Lint]
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Install Dependencies
-        run: yarn
+        run: npm install
       - name: Build Site
-        run: yarn build
+        run: npm run build
       - name: Deploy 🚢
         uses: peaceiris/actions-gh-pages@v3
         with:
