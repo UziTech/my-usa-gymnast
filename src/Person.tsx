@@ -45,9 +45,19 @@ export default function Person({id}: PersonProps): JSX.Element {
 					const aDate = data.sanctions[a].startDate;
 					const bDate = data.sanctions[b].startDate;
 					return bDate.localeCompare(aDate);
-				}).map(sanctionId =>
-					<Sanction key={sanctionId} person={data} id={+sanctionId} />,
-				)}
+				}).map(sanctionId => {
+					const sanction = data.sanctions[sanctionId];
+					return (
+						<Sanction
+							key={sanctionId}
+							name={sanction.name}
+							startDate={sanction.startDate}
+							endDate={sanction.endDate}
+							personId={data.person.personId}
+							id={+sanctionId}
+						/>
+					);
+				})}
 			</ul>
 		</div>
 	);

@@ -122,7 +122,10 @@ export interface personData {
 }
 
 export interface SanctionProps {
-	person: personData
+	name: string
+	startDate: string
+	endDate: string
+	personId: number
 	id: number
 }
 
