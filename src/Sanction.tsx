@@ -5,6 +5,7 @@ import {
 	sanctionData,
 	eventsByProgramData,
 	squadLetter,
+	personData,
 } from "./types";
 
 const eventsByProgram: eventsByProgramData = {
@@ -74,6 +75,16 @@ function isToday(startDate: string, endDate: string) {
 	return false;
 }
 
+async function fetchJson<T>(urls: string[]): Promise<T | undefined> {
+	const responses = await Promise.all(urls.map(url => fetch(url, {
+		headers: { accept: "application/json" },
+	}).then(r => r.ok && r.json())));
+	// only return data if all urls succeeded
+	if (responses.every(Boolean)) {
+		return responses as T;
+	}
+}
+
 const alias = [
 	...["", "a", "b", "c", "d"].map(l => [`jr ${l}`, `junior ${l}`]),
 	...["", "a", "b", "c", "d"].map(l => [`sr ${l}`, `senior ${l}`]),
@@ -103,14 +114,12 @@ function isEqual(s1: string, s2: string) {
 export default function Sanction({person, id}: SanctionProps): JSX.Element {
 	const [loaded, setLoaded] = useState(false);
 
-	const {value: data, error, loading, retry} = useAsyncRetry<sanctionData | undefined>(async () => {
+	const {value: data, error, loading, retry} = useAsyncRetry<[sanctionData, personData] | undefined>(async () => {
 		if (loaded && id) {
-			const response = await fetch(`https://uzitech.com/cbp/?url=https://api.myusagym.com/v2/sanctions/${id}`, {
-				headers: { accept: "application/json" },
-			});
-			if (response.ok) {
-				return await response.json() as sanctionData;
-			}
+			return await fetchJson<[sanctionData, personData]>([
+				`https://uzitech.com/cbp/?url=https://api.myusagym.com/v2/sanctions/${id}`,
+				`https://uzitech.com/cbp/?url=https://api.myusagym.com/v2/people/${person.person.personId}`,
+			]);
 		}
 	});
 
@@ -147,26 +156,26 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 		);
 	}
 
-	const sanctionPeople = person.sanctionPeople.find(s => s.sanctionId === id);
+	const sanctionPeople = data[1].sanctionPeople.find(s => s.sanctionId === id);
 
 	if (!sanctionPeople) {
 		return (
 			<li className="sanction error">Cannot find sanctionPeople</li>
 		);
 	}
-	const totalSessionPeople = Object.values(data.sanctionPeople).filter(s =>
+	const totalSessionPeople = Object.values(data[0].sanctionPeople).filter(s =>
 		s.sessionId === sanctionPeople.sessionId &&
 		isEqual(s.level, sanctionPeople.level) &&
 		isEqual(s.division, sanctionPeople.division),
 	).length;
 
-	const session = data.sessions.find(s => s.sessionId === sanctionPeople.sessionId);
+	const session = data[0].sessions.find(s => s.sessionId === sanctionPeople.sessionId);
 	if (!session) {
 		return (
 			<li className="sanction error">Cannot find session<br /><button onClick={retry}>Refresh</button></li>
 		);
 	}
-	const sessionResultSet = data.sessionResultSets.find(s =>
+	const sessionResultSet = data[0].sessionResultSets.find(s =>
 		s.sessionId === sanctionPeople.sessionId &&
 		isEqual(s.level, sanctionPeople.level) &&
 		isEqual(s.division, sanctionPeople.division),
@@ -179,7 +188,7 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 		return o;
 	}, {});
 
-	const scores = person.scores.filter(s => s.sanctionId === id && s.resultSetId === sessionResultSet?.resultSetId);
+	const scores = data[1].scores.filter(s => s.sanctionId === id && s.resultSetId === sessionResultSet?.resultSetId);
 
 	for (const event of Array.from(squadOrder)) {
 		const hasEventScore = scores.some(s => s.eventId === event);
@@ -191,7 +200,7 @@ export default function Sanction({person, id}: SanctionProps): JSX.Element {
 		}
 	}
 	scores.sort((a, b) => {
-		if (a.resultSetId && b.resultSetId) {
+		if (a.resultSetId && b.resultSetId && a.resultSetId !== b.resultSetId) {
 			return a.resultSetId - b.resultSetId;
 		}
 
