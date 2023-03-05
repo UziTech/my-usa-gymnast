@@ -105,7 +105,7 @@ export default function App(): JSX.Element {
 
 	if (!search) {
 		return render(
-			<SearchSanction />
+			<SearchSanction initialPast={query.has("past")} />
 		);
 	}
 

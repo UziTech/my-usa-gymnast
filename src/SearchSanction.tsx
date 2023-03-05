@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useAsyncRetry } from "react-use";
 import {
 	sanctionResult,
@@ -15,9 +15,9 @@ function renderEvent(s: sanctionResult) {
 	);
 }
 
-export default function SearchSanction(): JSX.Element {
+export default function SearchSanction({initialPast}: {initialPast: boolean}): JSX.Element {
 	const [filter, setFilter] = useState<string>("");
-	const [past, setPast] = useState<boolean>(false);
+	const [past, setPast] = useState<boolean>(initialPast);
 	const [loaded, setLoaded] = useState<boolean>(false);
 	const { value: data, error, loading, retry } = useAsyncRetry<sanctionResult[] | undefined>(async () => {
 		const response = await fetchJson<[sanctionResult[]]>([[`https://uzitech.com/cbp/?url=https://api.myusagym.com/v1/meets/${past ? "past" : "live"}`, true]]);
@@ -57,6 +57,13 @@ export default function SearchSanction(): JSX.Element {
 		return d.name.toLocaleLowerCase().includes(filter.toLocaleLowerCase())
 	});
 
+	function changePast(e: React.MouseEvent<HTMLAnchorElement>) {
+		e.preventDefault();
+		setPast(!past);
+		setLoaded(false);
+		window.history.replaceState(null, "", past ? "?" : "?past");
+	}
+
 	const men = sanctions.filter(s => s.program === 2);
 	const women = sanctions.filter(s => s.program === 1);
 	const other = sanctions.filter(s => ![1, 2].includes(s.program));
@@ -65,7 +72,7 @@ export default function SearchSanction(): JSX.Element {
 		<div className="sanctions">
 			<FilterBox onChange={setFilter} />
 			<h2>Pick your Event:</h2>
-			<button onClick={() => {setPast(!past); setLoaded(false);}}>{past ? "See Live Events" : "See Past Events"}</button>
+			<a onClick={changePast} href={past ? "?" : "?past"}>{past ? "See Live Events" : "See Past Events"}</a>
 			<h3>Men</h3>
 			<ul>
 				{men.map(renderEvent)}
