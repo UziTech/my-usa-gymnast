@@ -1,5 +1,6 @@
 
-const cache: {[index: string]: [any, boolean]} = {};
+let nextId = 0;
+let cache: {[index: string]: [number, boolean, any]} = {};
 
 function fetchUrl(u: string) {
 	return fetch(u, {
@@ -8,11 +9,40 @@ function fetchUrl(u: string) {
 }
 
 function setCache(u: string) {
-	cache[u][0] = fetchUrl(u).then(r => {
-		cache[u][0] = r;
-		cache[u][1] = true;
-		return r;
-	});
+	const id = nextId++;
+	cache[u] = [
+		id,
+		false,
+		fetchUrl(u).then(r => {
+			if (!cache[u] || cache[u][0] !== id) {
+				// cache was cleared or retried
+				return;
+			}
+
+			cache[u][1] = true;
+			cache[u][2] = r;
+			return r;
+		})
+	];
+}
+
+export async function clearCache(url?: string, force?: boolean) {
+	await Promise.all(Object.keys(cache).map(async (u) => {
+		if (url && u !== url) {
+			return;
+		}
+
+		if (!cache[u][1] && !force) {
+			const id = cache[u][0];
+			await cache[u][2];
+			if (!cache[u] || cache[u][0] !== id) {
+				// cache force cleared while awaiting
+				return;
+			}
+		}
+
+		delete cache[u];
+	}));
 }
 
 export async function fetchJson<T>(urls: Array<string | [string, boolean]>): Promise<T | undefined> {
@@ -21,14 +51,10 @@ export async function fetchJson<T>(urls: Array<string | [string, boolean]>): Pro
 			const shouldCache = url[1];
 			url = url[0];
 			if (shouldCache) {
-				if (!cache[url]) {
-					cache[url] = [null, false];
-					setCache(url);
-				} else if (cache[url][1] && !cache[url][0]) {
-					// try again
+				if (!cache[url] || (cache[url][1] && !cache[url][2])) {
 					setCache(url);
 				}
-				return cache[url][0];
+				return cache[url][2];
 			}
 		}
 
