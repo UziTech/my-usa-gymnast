@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/my-usa-gymnast/static/css/main.24811964.css",
-    "main.js": "/my-usa-gymnast/static/js/main.17f1b31f.js",
+    "main.css": "/my-usa-gymnast/static/css/main.7d0d0f3e.css",
+    "main.js": "/my-usa-gymnast/static/js/main.3168053d.js",
     "index.html": "/my-usa-gymnast/index.html",
-    "main.24811964.css.map": "/my-usa-gymnast/static/css/main.24811964.css.map",
-    "main.17f1b31f.js.map": "/my-usa-gymnast/static/js/main.17f1b31f.js.map"
+    "main.7d0d0f3e.css.map": "/my-usa-gymnast/static/css/main.7d0d0f3e.css.map",
+    "main.3168053d.js.map": "/my-usa-gymnast/static/js/main.3168053d.js.map"
   },
   "entrypoints": [
-    "static/css/main.24811964.css",
-    "static/js/main.17f1b31f.js"
+    "static/css/main.7d0d0f3e.css",
+    "static/js/main.3168053d.js"
   ]
 }
