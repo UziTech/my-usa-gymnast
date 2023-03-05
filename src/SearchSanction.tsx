@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { useAsync } from "react-use";
 import {
 	sanctionResult,
 } from "./types";
+import SearchBox from "./SearchBox";
+import FilterBox from "./FilterBox";
 
 function renderEvent(name: string) {
 	return (s: sanctionResult) => {
@@ -14,6 +17,7 @@ function renderEvent(name: string) {
 }
 
 export default function SearchSanction({name, past}: {name: string, past: boolean}): JSX.Element {
+	const [filter, setFilter] = useState<string>("");
 	const { value: data, error, loading } = useAsync<() => Promise<sanctionResult[] | undefined>>(async () => {
 		const response = await fetch(`https://uzitech.com/cbp/?url=https://api.myusagym.com/v1/meets/${past ? "past" : "live"}`, {
 			headers: { accept: "application/json" },
@@ -41,12 +45,15 @@ export default function SearchSanction({name, past}: {name: string, past: boolea
 		);
 	}
 
-	const men = data.filter(s => s.program === 2);
-	const women = data.filter(s => s.program === 1);
-	const other = data.filter(s => ![1, 2].includes(s.program));
+	const sanctions = !filter ? data : data.filter(d => d.name.toLocaleLowerCase().includes(filter.toLocaleLowerCase()));
+
+	const men = sanctions.filter(s => s.program === 2);
+	const women = sanctions.filter(s => s.program === 1);
+	const other = sanctions.filter(s => ![1, 2].includes(s.program));
 
 	return (
 		<div className="names">
+			<FilterBox onChange={setFilter} />
 			<h2>Pick your Event:</h2>
 			<h3>Men</h3>
 			<ul>
@@ -66,6 +73,7 @@ export default function SearchSanction({name, past}: {name: string, past: boolea
 					</>
 				)
 			}
+			<SearchBox />
 		</div>
 	);
 }

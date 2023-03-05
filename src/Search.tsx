@@ -6,6 +6,8 @@ import {
 	peopleData,
 } from "./types";
 import names from "./names.json";
+import SearchBox from "./SearchBox";
+import FilterBox from "./FilterBox";
 
 function changeIds(ids: number[]) {
 	return () => {
@@ -13,14 +15,10 @@ function changeIds(ids: number[]) {
 	};
 }
 
-function onSearch(q: string) {
-	window.location.href = `?${q.match(/^\d{5}$/) ? "zip" : "s"}=${q}`;
-}
-
 export default function Search({search, name}: SearchProps): JSX.Element {
+	const [filter, setFilter] = useState<string>("");
 	const [people, setPeople] = useState<peopleData[]>();
 	const [checked, setChecked] = useState<number[]>([]);
-	const [inputValue, setInputValue] = useState<string>("");
 	const { value: data, error, loading } = useAsync<() => Promise<sanctionData | undefined>>(async () => {
 		if (search) {
 			const response = await fetch(`https://uzitech.com/cbp/?url=https://api.myusagym.com/v2/sanctions/${search}`, {
@@ -81,8 +79,12 @@ export default function Search({search, name}: SearchProps): JSX.Element {
 		};
 	}
 
-	const clubs = !people ? null : people.reduce((prev, p) => {
-		const club = p.club ?? "";
+	const clubs = !people ? null : people.filter(p => {
+		const lFilter = filter.toLocaleLowerCase();
+		return p.name.toLocaleLowerCase().includes(lFilter) ||
+			p.club.toLocaleLowerCase().includes(lFilter);
+	}).reduce((prev, p) => {
+		const club = p.club;
 		if (!(club in prev)) {
 			prev[club] = [];
 		}
@@ -94,6 +96,7 @@ export default function Search({search, name}: SearchProps): JSX.Element {
 
 	return (
 		<div className="names">
+			<FilterBox onChange={setFilter} />
 			<h2>Pick your Athletes:</h2>
 			{!clubs ? null : Object.keys(clubs).map(c => {
 				return (
@@ -112,13 +115,7 @@ export default function Search({search, name}: SearchProps): JSX.Element {
 				)
 			})}
 			<button onClick={changeIds(checked)}>Go</button>
-			<div style={{display: "hidden"}}>
-				<h2>or search</h2>
-				<form onSubmit={(e) => e.preventDefault()}>
-					<input value={inputValue} onChange={(e) => setInputValue(e.target.value)} />
-					<button onClick={() => onSearch(inputValue)}>Go</button>
-				</form>
-			</div>
+			<SearchBox />
 		</div>
 	);
 }

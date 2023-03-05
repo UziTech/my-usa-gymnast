@@ -111,19 +111,13 @@ export default function App(): JSX.Element {
 		}
 	}
 
-	if (search || !name) {
+	if (!search) {
 		return (
-			<Search search={search} name={name} />
-		);
-	}
-
-	if (query.get("past") !== null) {
-		return (
-			<SearchSanction name={name} past={true} />
+			<SearchSanction name={name || ""} past={query.has("past")} />
 		);
 	}
 
 	return (
-		<SearchSanction name={name} past={false} />
+		<Search search={search} name={name} />
 	);
 }

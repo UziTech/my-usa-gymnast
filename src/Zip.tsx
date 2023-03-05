@@ -52,14 +52,15 @@ function distance(zipFrom: string, zip: string) {
 // get zip from location
 export default function Zip({zipCode}: ZipProps): JSX.Element {
 	const [zip, setZip] = useState<string>(zipCode);
-	let undef;
-	const zipFrom = zip.match(/^\d{5}$/) ? findClosestZip(zip) : undef;
+	const zipFrom = zip.match(/^\d{5}$/) ? findClosestZip(zip) : undefined;
+	console.log(zipFrom);
+	
 
 	useEffect(() => {
-		if (zipFrom) {
-			window.history.replaceState({}, "", `https://uzitech.github.io/my-usa-gymnast/?zip=${zipFrom}`);
+		if (zipFrom && zipFrom !== zip) {
+			window.history.replaceState({}, "", `${window.location.href.split("?")[0]}?zip=${zipFrom}`);
 		}
-	}, [zipFrom]);
+	}, [zipFrom, zip]);
 
 	const clubs: clubType[] = zipFrom ? allClubs.map(c => {
 		const validZip = c.zip.match(/^\d{5}/);

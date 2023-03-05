@@ -1,9 +1,9 @@
 [
-	{ "name": "Lexi Brix", "id": 1979112 },
-	{ "name": "Charlotte Ward", "id": 1985072 },
-	{ "name": "Logan Brix", "id": 1913246 },
-	{ "name": "Caleb Skramsted", "id": 1400313 },
-	{ "name": "Adrian Ramos", "id": 1403712 },
-	{ "name": "Keiran Rea", "id": 2088313}
+	{ "name": "Lexi Brix", "id": 1979112, "club": "" },
+	{ "name": "Charlotte Ward", "id": 1985072, "club": "" },
+	{ "name": "Logan Brix", "id": 1913246, "club": "" },
+	{ "name": "Caleb Skramsted", "id": 1400313, "club": "" },
+	{ "name": "Adrian Ramos", "id": 1403712, "club": "" },
+	{ "name": "Keiran Rea", "id": 2088313, "club": "" }
 
 ]

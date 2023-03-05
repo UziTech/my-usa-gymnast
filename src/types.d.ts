@@ -190,7 +190,7 @@ export interface eventsByProgramData {
 export interface peopleData {
 	name: string
 	id: number
-	club?: string
+	club: string
 }
 
 export interface ZipProps {
