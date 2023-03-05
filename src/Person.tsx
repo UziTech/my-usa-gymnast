@@ -9,20 +9,19 @@ import {
 const refreshes: SanctionRefreshes = {};
 
 function addRefresh(sanctionId: number) {
-	return (refresh: () => void) => {
+	return (r: () => void) => {
 		if (!refreshes[sanctionId]) {
 			refreshes[sanctionId] = [];
 		}
-		refreshes[sanctionId].push(refresh);
+		refreshes[sanctionId].push(r);
 	};
 }
 
-function refresh(sanctionId: number) {
+function refreshSanction(sanctionId: number) {
 	return () => {
 		if (!refreshes[sanctionId]) {
 			return;
 		}
-		
 		refreshes[sanctionId].map(r => r());
 	}
 }
@@ -75,7 +74,7 @@ export default function Person({id}: PersonProps): JSX.Element {
 							endDate={sanction.endDate}
 							personId={data.person.personId}
 							id={+sanctionId}
-							refresh={refresh(+sanctionId)}
+							refresh={refreshSanction(+sanctionId)}
 							addRefresh={addRefresh(+sanctionId)}
 						/>
 					);
