@@ -77,20 +77,37 @@ function isToday(startDate: string, endDate: string) {
 	return false;
 }
 
-const cache: {[index: string]: any} = {};
+const cache: {[index: string]: [any, boolean]} = {};
 
-async function fetchJson<T>(urls: Array<string | [string, true]>): Promise<T | undefined> {
-	const responses = await Promise.all(urls.map(async (url) => {
-		function fetchUrl(u: string) {
-			return fetch(u, {
-				headers: { accept: "application/json" },
-			}).then(r => r.ok && r.json())
-		}
+function fetchUrl(u: string) {
+	return fetch(u, {
+		headers: { accept: "application/json" },
+	}).then(r => r.ok && r.json());
+}
+
+function setCache(u: string) {
+	cache[u][0] = fetchUrl(u).then(r => {
+		cache[u][0] = r;
+		cache[u][1] = true;
+		return r;
+	});
+}
+
+async function fetchJson<T>(urls: Array<string | [string, boolean]>): Promise<T | undefined> {
+	const responses = await Promise.all(urls.map(url => {
 		if (Array.isArray(url)) {
-			if (!cache[url[0]]) {
-				cache[url[0]] = await fetchUrl(url[0]);
+			const shouldCache = url[1];
+			url = url[0];
+			if (shouldCache) {
+				if (!cache[url]) {
+					cache[url] = [null, false];
+					setCache(url);
+				} else if (cache[url][1] && !cache[url][0]) {
+					// try again
+					setCache(url);
+				}
+				return cache[url][0];
 			}
-			return cache[url[0]];
 		}
 
 		return fetchUrl(url);
