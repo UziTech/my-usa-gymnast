@@ -127,6 +127,8 @@ export interface SanctionProps {
 	endDate: string
 	personId: number
 	id: number
+	refresh: () => void
+	addRefresh: (refresh: () => void) => void
 }
 
 interface session {
@@ -215,4 +217,8 @@ export interface clubType {
 	phone: number | null
 	fax: number | null
 	distance?: number
+}
+
+export interface SanctionRefreshes {
+	[index: number]: Array<() => void>
 }

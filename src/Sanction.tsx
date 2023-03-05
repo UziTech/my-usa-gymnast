@@ -111,7 +111,7 @@ function isEqual(s1: string, s2: string) {
 	);
 }
 
-export default function Sanction({name, startDate, endDate, personId, id}: SanctionProps): JSX.Element {
+export default function Sanction({name, startDate, endDate, personId, id, refresh, addRefresh}: SanctionProps): JSX.Element {
 	const [loaded, setLoaded] = useState(false);
 
 	const {value: data, error, loading, retry} = useAsyncRetry<[sanctionData, personData] | undefined>(async () => {
@@ -122,6 +122,8 @@ export default function Sanction({name, startDate, endDate, personId, id}: Sanct
 			]);
 		}
 	});
+
+	addRefresh(retry);
 
 	useEffect(() => {
 		if (!loaded && !loading && !data && isToday(startDate, endDate)) {
@@ -253,7 +255,7 @@ export default function Sanction({name, startDate, endDate, personId, id}: Sanct
 				<table>
 					<thead>
 						<tr>
-							<th><button onClick={retry} className="refresh" disabled={loading}>{loading ? "..." : "Refresh"}</button></th>
+							<th><button onClick={refresh} className="refresh" disabled={loading}>{loading ? "..." : "Refresh"}</button></th>
 							{showDifficulty ? <th>Difficulty</th> : null}
 							{showExecution ? <th>Execution</th> : null}
 							{showDeductions ? <th>Deduction</th> : null}
