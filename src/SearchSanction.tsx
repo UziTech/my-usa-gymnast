@@ -53,7 +53,7 @@ export default function SearchSanction({past}: {past: boolean}): JSX.Element {
 	const other = sanctions.filter(s => ![1, 2].includes(s.program));
 
 	return (
-		<div className="names">
+		<div className="sanctions">
 			<FilterBox onChange={setFilter} />
 			<h2>Pick your Event:</h2>
 			<a href={past ? "?" : "?past"}>{past ? "See Live Events" : "See Past Events"}</a>
