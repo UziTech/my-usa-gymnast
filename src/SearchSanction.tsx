@@ -13,9 +13,9 @@ function renderEvent(name: string) {
 	}
 }
 
-export default function SearchSanction({name}: {name: string}): JSX.Element {
+export default function SearchSanction({name, past}: {name: string, past: boolean}): JSX.Element {
 	const { value: data, error, loading } = useAsync<() => Promise<sanctionResult[] | undefined>>(async () => {
-		const response = await fetch("https://uzitech.com/cbp/?url=https://api.myusagym.com/v1/meets/live", {
+		const response = await fetch(`https://uzitech.com/cbp/?url=https://api.myusagym.com/v1/meets/${past ? "past" : "live"}`, {
 			headers: { accept: "application/json" },
 		});
 		if (response.ok) {

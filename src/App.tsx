@@ -117,7 +117,13 @@ export default function App(): JSX.Element {
 		);
 	}
 
+	if (query.get("past") !== null) {
+		return (
+			<SearchSanction name={name} past={true} />
+		);
+	}
+
 	return (
-		<SearchSanction name={name} />
+		<SearchSanction name={name} past={false} />
 	);
 }
