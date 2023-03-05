@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext, useCallback } from "react";
 import { useAsyncRetry } from "react-use";
 import {
 	SanctionProps,
@@ -7,6 +7,8 @@ import {
 	squadLetter,
 	personData,
 } from "./types";
+import { AppContext } from "./AppContext";
+
 
 const eventsByProgram: eventsByProgramData = {
 	Women: {
@@ -111,11 +113,12 @@ function isEqual(s1: string, s2: string) {
 	);
 }
 
-export default function Sanction({name, startDate, endDate, personId, id, refresh, addRefresh}: SanctionProps): JSX.Element {
+export default function Sanction({name, startDate, endDate, personId, id}: SanctionProps): JSX.Element {
 	const [loaded, setLoaded] = useState(false);
+  const [appContext, setAppContext] = useContext(AppContext);
 
 	const {value: data, error, loading, retry} = useAsyncRetry<[sanctionData, personData] | undefined>(async () => {
-		if (loaded && id) {
+		if (loaded && id && personId) {
 			return await fetchJson<[sanctionData, personData]>([
 				`https://uzitech.com/cbp/?url=https://api.myusagym.com/v2/sanctions/${id}`,
 				`https://uzitech.com/cbp/?url=https://api.myusagym.com/v2/people/${personId}`,
@@ -123,18 +126,35 @@ export default function Sanction({name, startDate, endDate, personId, id, refres
 		}
 	});
 
-	addRefresh(retry);
+	function refresh() {
+		for (const person in appContext[id]) {
+			appContext[id][person]();
+		}
+	}
+
+	const load = useCallback(() => {
+		setLoaded(true);
+
+		retry();
+		
+		setAppContext(prevContext => ({
+			...prevContext,
+			[id]: {
+				...(prevContext[id] ?? []),
+				[personId]: retry,
+			},
+		}));
+	}, [retry, id, setAppContext, personId]);
 
 	useEffect(() => {
 		if (!loaded && !loading && !data && isToday(startDate, endDate)) {
-			setLoaded(true);
-			retry();
+			load();
 		}
-	}, [retry, startDate, endDate, data, loading, loaded]);
+	}, [startDate, endDate, data, loading, loaded, load]);
 
-	if (!loaded) {
+	if (error) {
 		return (
-			<li className="sanction sanction-button"><button onClick={() => { setLoaded(true); retry(); }}>Load {name}<br />{toShortDate(startDate)}-{toShortDate(endDate)}</button></li>
+			<li className="sanction error"><h3>{error.message}</h3><button onClick={retry}>Refresh</button></li>
 		);
 	}
 
@@ -144,15 +164,9 @@ export default function Sanction({name, startDate, endDate, personId, id, refres
 		);
 	}
 
-	if (error) {
-		return (
-			<li className="sanction error"><h3>{error.message}</h3><button onClick={retry}>Refresh</button></li>
-		);
-	}
-
 	if (!data) {
 		return (
-			<li className="sanction error"><h3>No data for {name}</h3><button onClick={retry}>Refresh</button></li>
+			<li className="sanction sanction-button"><button onClick={load}>Load {name}<br />{toShortDate(startDate)}-{toShortDate(endDate)}</button></li>
 		);
 	}
 

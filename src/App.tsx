@@ -3,6 +3,7 @@ import Person from "./Person";
 import Search from "./Search";
 import Zip from "./Zip";
 import SearchSanction from "./SearchSanction";
+import { AppContextProvider } from "./AppContext";
 
 function throttle(func: (...args: unknown[]) => void, wait = 100) {
 	let waiting = false;
@@ -75,15 +76,17 @@ export default function App(): JSX.Element {
 		const ids = id.split(",");
 		if (ids.length > 0) {
 			return (
-				<div className="persons" ref={persons}>
-					<button onClick={scrollLeft} ref={leftArrow} className={`left arrow ${hasLeft ? "" : "hide"}`}>&lt;</button>
-					<button onClick={scrollRight} ref={rightArrow} className={`right arrow ${hasRight ? "" : "hide"}`}>&gt;</button>
-					{ids.map(i => {
-						return (
-							<Person key={i} id={i} />
-						);
-					})}
-				</div>
+				<AppContextProvider>
+					<div className="persons" ref={persons}>
+						<button onClick={scrollLeft} ref={leftArrow} className={`left arrow ${hasLeft ? "" : "hide"}`}>&lt;</button>
+						<button onClick={scrollRight} ref={rightArrow} className={`right arrow ${hasRight ? "" : "hide"}`}>&gt;</button>
+						{ids.map(i => {
+							return (
+								<Person key={i} id={i} />
+							);
+						})}
+					</div>
+				</AppContextProvider>
 			);
 		}
 	}

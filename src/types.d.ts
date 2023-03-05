@@ -127,8 +127,6 @@ export interface SanctionProps {
 	endDate: string
 	personId: number
 	id: number
-	refresh: () => void
-	addRefresh: (refresh: () => void) => void
 }
 
 interface session {

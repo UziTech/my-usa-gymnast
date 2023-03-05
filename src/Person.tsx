@@ -3,28 +3,7 @@ import Sanction from "./Sanction";
 import {
 	PersonProps,
 	personData,
-	SanctionRefreshes,
 } from "./types";
-
-const refreshes: SanctionRefreshes = {};
-
-function addRefresh(sanctionId: number) {
-	return (r: () => void) => {
-		if (!refreshes[sanctionId]) {
-			refreshes[sanctionId] = [];
-		}
-		refreshes[sanctionId].push(r);
-	};
-}
-
-function refreshSanction(sanctionId: number) {
-	return () => {
-		if (!refreshes[sanctionId]) {
-			return;
-		}
-		refreshes[sanctionId].map(r => r());
-	}
-}
 
 export default function Person({id}: PersonProps): JSX.Element {
 	const {value: data, error, loading} = useAsync<() => Promise<personData | undefined>>(async () => {
@@ -74,8 +53,6 @@ export default function Person({id}: PersonProps): JSX.Element {
 							endDate={sanction.endDate}
 							personId={data.person.personId}
 							id={+sanctionId}
-							refresh={refreshSanction(+sanctionId)}
-							addRefresh={addRefresh(+sanctionId)}
 						/>
 					);
 				})}
