@@ -101,7 +101,7 @@ export default function App(): JSX.Element {
 	const s = query.get("s");
 	let search = null;
 	let name = null;
-	if (s) {
+	if (s !== null) {
 		const terms = s.split(" ");
 		search = terms.shift() as string;
 		name = terms.join(" ");

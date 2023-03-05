@@ -64,12 +64,10 @@ export default function Search({search, name}: SearchProps): JSX.Element {
 			}
 
 			return p.firstName.toLowerCase().startsWith(terms[0]) || p.lastName.toLowerCase().startsWith(terms[0]);
-		}).map(p => {
-			return {
-				id: p.personId,
-				name: `${p.firstName} ${p.lastName}`,
-			};
-		}));
+		}).map(p => ({
+			id: p.personId,
+			name: `${p.firstName} ${p.lastName}`,
+		})).sort((a, b) => a.name.localeCompare(b.name)));
 	}
 
 	function changeCheckbox(id: number) {
