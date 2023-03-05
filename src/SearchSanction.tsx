@@ -9,7 +9,7 @@ import { fetchJson } from "./fetchJson";
 
 function renderEvent(s: sanctionResult) {
 	return (
-		<li className="names" key={s.sanctionId}>
+		<li className="sanctions-link" key={s.sanctionId}>
 			<a href={`?s=${s.sanctionId.toString()}`}>{s.name}</a>
 		</li>
 	);
