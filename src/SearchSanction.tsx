@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useAsync } from "react-use";
+import { useState, useEffect } from "react";
+import { useAsyncRetry } from "react-use";
 import {
 	sanctionResult,
 } from "./types";
@@ -15,12 +15,21 @@ function renderEvent(s: sanctionResult) {
 	);
 }
 
-export default function SearchSanction({past}: {past: boolean}): JSX.Element {
+export default function SearchSanction(): JSX.Element {
 	const [filter, setFilter] = useState<string>("");
-	const { value: data, error, loading } = useAsync<() => Promise<sanctionResult[] | undefined>>(async () => {
+	const [past, setPast] = useState<boolean>(false);
+	const [loaded, setLoaded] = useState<boolean>(false);
+	const { value: data, error, loading, retry } = useAsyncRetry<sanctionResult[] | undefined>(async () => {
 		const response = await fetchJson<[sanctionResult[]]>([[`https://uzitech.com/cbp/?url=https://api.myusagym.com/v1/meets/${past ? "past" : "live"}`, true]]);
 		return response?.[0];
 	});
+
+	useEffect(() => {
+		if (!loaded && !loading) {
+			retry();
+			setLoaded(true);
+		}
+	}, [loaded, loading, retry]);
 
 	if (loading) {
 		return (
@@ -56,7 +65,7 @@ export default function SearchSanction({past}: {past: boolean}): JSX.Element {
 		<div className="sanctions">
 			<FilterBox onChange={setFilter} />
 			<h2>Pick your Event:</h2>
-			<a href={past ? "?" : "?past"}>{past ? "See Live Events" : "See Past Events"}</a>
+			<button onClick={() => {setPast(!past); setLoaded(false);}}>{past ? "See Live Events" : "See Past Events"}</button>
 			<h3>Men</h3>
 			<ul>
 				{men.map(renderEvent)}
