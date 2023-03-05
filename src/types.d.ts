@@ -4,7 +4,6 @@ export interface PersonProps {
 
 export interface SearchProps {
 	search: number|string|null
-	name: string|null
 }
 
 interface person {

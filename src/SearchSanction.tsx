@@ -7,17 +7,15 @@ import SearchBox from "./SearchBox";
 import FilterBox from "./FilterBox";
 import { fetchJson } from "./fetchJson";
 
-function renderEvent(name: string) {
-	return (s: sanctionResult) => {
-		return (
-			<li className="names" key={s.sanctionId}>
-				<a href={`?s=${s.sanctionId.toString()} ${name}`}>{s.name}</a>
-			</li>
-		);
-	}
+function renderEvent(s: sanctionResult) {
+	return (
+		<li className="names" key={s.sanctionId}>
+			<a href={`?s=${s.sanctionId.toString()}`}>{s.name}</a>
+		</li>
+	);
 }
 
-export default function SearchSanction({name, past}: {name: string, past: boolean}): JSX.Element {
+export default function SearchSanction({past}: {past: boolean}): JSX.Element {
 	const [filter, setFilter] = useState<string>("");
 	const { value: data, error, loading } = useAsync<() => Promise<sanctionResult[] | undefined>>(async () => {
 		const response = await fetchJson<[sanctionResult[]]>([[`https://uzitech.com/cbp/?url=https://api.myusagym.com/v1/meets/${past ? "past" : "live"}`, true]]);
@@ -61,18 +59,18 @@ export default function SearchSanction({name, past}: {name: string, past: boolea
 			<a href={past ? "?" : "?past"}>{past ? "See Live Events" : "See Past Events"}</a>
 			<h3>Men</h3>
 			<ul>
-				{men.map(renderEvent(name))}
+				{men.map(renderEvent)}
 			</ul>
 			<h3>Women</h3>
 			<ul>
-				{women.map(renderEvent(name))}
+				{women.map(renderEvent)}
 			</ul>
 			{
 				other.length === 0 ? null : (
 					<>
 						<h3>Other</h3>
 						<ul>
-							{other.map(renderEvent(name))}
+							{other.map(renderEvent)}
 						</ul>
 					</>
 				)

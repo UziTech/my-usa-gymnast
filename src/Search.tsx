@@ -1,11 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useAsync } from "react-use";
 import {
 	SearchProps,
 	sanctionData,
 	peopleData,
 } from "./types";
-import names from "./names.json";
 import SearchBox from "./SearchBox";
 import FilterBox from "./FilterBox";
 import { fetchJson } from "./fetchJson";
@@ -16,9 +15,8 @@ function changeIds(ids: number[]) {
 	};
 }
 
-export default function Search({search, name}: SearchProps): JSX.Element {
+export default function Search({search}: SearchProps): JSX.Element {
 	const [filter, setFilter] = useState<string>("");
-	const [people, setPeople] = useState<peopleData[]>();
 	const [checked, setChecked] = useState<number[]>([]);
 	const { value: data, error, loading } = useAsync<() => Promise<sanctionData | undefined>>(async () => {
 		if (search) {
@@ -26,12 +24,6 @@ export default function Search({search, name}: SearchProps): JSX.Element {
 			return response?.[0];
 		}
 	});
-
-	useEffect(() => {
-		if (!data && !search) {
-			setPeople(names);
-		}
-	}, [search, data]);
 
 	if (loading) {
 		return (
@@ -45,26 +37,17 @@ export default function Search({search, name}: SearchProps): JSX.Element {
 		);
 	}
 
-	if (!people && !data) {
+	if (!data) {
 		return (
 			<div className="error">No data</div>
 		);
 	}
 
-	if (!people && data) {
-		const terms = (name || "").toLowerCase().split(" ");
-		setPeople(Object.values(data.people).filter(p => {
-			if (terms.length > 1) {
-				return p.firstName.toLowerCase().startsWith(terms[0]) && p.lastName.toLowerCase().startsWith(terms[1]);
-			}
-
-			return p.firstName.toLowerCase().startsWith(terms[0]) || p.lastName.toLowerCase().startsWith(terms[0]);
-		}).map(p => ({
+	const people = Object.values(data.people).map(p => ({
 			club: data.clubs[p.clubId]?.name || "",
 			id: p.personId,
 			name: `${p.firstName} ${p.lastName}`,
-		})).sort((a, b) => a.club.localeCompare(b.club) || a.name.localeCompare(b.name)));
-	}
+		})).sort((a, b) => a.club.localeCompare(b.club) || a.name.localeCompare(b.name));
 
 	function changeCheckbox(id: number) {
 		return ({target}: {target: HTMLInputElement}) => {

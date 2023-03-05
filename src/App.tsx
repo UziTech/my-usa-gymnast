@@ -1,31 +1,42 @@
-import React, {useRef, useEffect, useState} from "react";
+import React, {useRef, useEffect, useState, ReactElement} from "react";
 import Person from "./Person";
 import Search from "./Search";
 import Zip from "./Zip";
 import SearchSanction from "./SearchSanction";
 import { AppContextProvider } from "./AppContext";
 
-function throttle(func: (...args: unknown[]) => void, wait = 100) {
-	let waiting = false;
-	let shouldCall = false;
-	return function (this: unknown, ...args: unknown[]) {
-		if (waiting) {
-			shouldCall = true;
-			return;
-		}
-		const callFunc = () => {
-			waiting = true;
-			shouldCall = false;
-			setTimeout(() => {
-				waiting = false;
-				if (shouldCall) {
-					callFunc();
-				}
-			}, wait);
-			func.call(this, ...args);
-		};
-		callFunc();
-	};
+// function throttle(func: (...args: unknown[]) => void, wait = 100) {
+// 	let waiting = false;
+// 	let shouldCall = false;
+// 	return function (this: unknown, ...args: unknown[]) {
+// 		if (waiting) {
+// 			shouldCall = true;
+// 			return;
+// 		}
+// 		const callFunc = () => {
+// 			waiting = true;
+// 			shouldCall = false;
+// 			setTimeout(() => {
+// 				waiting = false;
+// 				if (shouldCall) {
+// 					callFunc();
+// 				}
+// 			}, wait);
+// 			func.call(this, ...args);
+// 		};
+// 		callFunc();
+// 	};
+// }
+
+function render(children: ReactElement) {
+	return (
+		<>
+		<header>
+			<a href="?">Home</a>
+		</header>
+		{children}
+		</>
+	)
 }
 
 export default function App(): JSX.Element {
@@ -38,8 +49,8 @@ export default function App(): JSX.Element {
 	useEffect(() => {
 		if (persons.current) {
 			toggleArrows();
-			persons.current.addEventListener("scroll", throttle(toggleArrows), {passive: true});
-			persons.current.addEventListener("scroll", updateTop, {passive: true});
+			// persons.current.addEventListener("scroll", throttle(toggleArrows), {passive: true});
+			// persons.current.addEventListener("scroll", updateTop, {passive: true});
 		}
 	}, [persons]);
 
@@ -51,12 +62,12 @@ export default function App(): JSX.Element {
 		}
 	}
 
-	function updateTop() {
-		if (persons.current && leftArrow.current && rightArrow.current) {
-			leftArrow.current.style.top = `${10 - persons.current.scrollTop}px`;
-			rightArrow.current.style.top = `${10 - persons.current.scrollTop}px`;
-		}
-	}
+	// function updateTop() {
+	// 	if (persons.current && leftArrow.current && rightArrow.current) {
+	// 		leftArrow.current.style.top = `${10 - persons.current.scrollTop}px`;
+	// 		rightArrow.current.style.top = `${10 - persons.current.scrollTop}px`;
+	// 	}
+	// }
 
 	function scrollLeft() {
 		if (persons.current) {
@@ -75,7 +86,7 @@ export default function App(): JSX.Element {
 	if (id) {
 		const ids = id.split(",");
 		if (ids.length > 0) {
-			return (
+			return render(
 				<AppContextProvider>
 					<div className="persons" ref={persons}>
 						<button onClick={scrollLeft} ref={leftArrow} className={`left arrow ${hasLeft ? "" : "hide"}`}>&lt;</button>
@@ -93,31 +104,20 @@ export default function App(): JSX.Element {
 
 	if (query.has("zip")) {
 		const zip = query.get("zip");
-		return (
+		return render(
 			<Zip zipCode={zip || ""} />
 		);
 	}
 
-	const s = query.get("s");
-	let search = null;
-	let name = null;
-	if (s !== null) {
-		const terms = s.split(" ");
-		search = terms.shift() as string;
-		name = terms.join(" ");
-		if (isNaN(parseInt(search, 10))) {
-			name = `${search} ${name}`;
-			search = null;
-		}
-	}
+	const search = query.get("s");
 
 	if (!search) {
-		return (
-			<SearchSanction name={name || ""} past={query.has("past")} />
+		return render(
+			<SearchSanction past={query.has("past")} />
 		);
 	}
 
-	return (
-		<Search search={search} name={name} />
+	return render(
+		<Search search={search} />
 	);
 }
