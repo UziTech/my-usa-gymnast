@@ -5,28 +5,28 @@ import Zip from "./Zip";
 import SearchSanction from "./SearchSanction";
 import { AppContextProvider } from "./AppContext";
 
-// function throttle(func: (...args: unknown[]) => void, wait = 100) {
-// 	let waiting = false;
-// 	let shouldCall = false;
-// 	return function (this: unknown, ...args: unknown[]) {
-// 		if (waiting) {
-// 			shouldCall = true;
-// 			return;
-// 		}
-// 		const callFunc = () => {
-// 			waiting = true;
-// 			shouldCall = false;
-// 			setTimeout(() => {
-// 				waiting = false;
-// 				if (shouldCall) {
-// 					callFunc();
-// 				}
-// 			}, wait);
-// 			func.call(this, ...args);
-// 		};
-// 		callFunc();
-// 	};
-// }
+function throttle(func: (...args: unknown[]) => void, wait = 100) {
+	let waiting = false;
+	let shouldCall = false;
+	return function (this: unknown, ...args: unknown[]) {
+		if (waiting) {
+			shouldCall = true;
+			return;
+		}
+		const callFunc = () => {
+			waiting = true;
+			shouldCall = false;
+			setTimeout(() => {
+				waiting = false;
+				if (shouldCall) {
+					callFunc();
+				}
+			}, wait);
+			func.call(this, ...args);
+		};
+		callFunc();
+	};
+}
 
 function render(children: ReactElement) {
 	return (
@@ -49,8 +49,7 @@ export default function App(): JSX.Element {
 	useEffect(() => {
 		if (persons.current) {
 			toggleArrows();
-			// persons.current.addEventListener("scroll", throttle(toggleArrows), {passive: true});
-			// persons.current.addEventListener("scroll", updateTop, {passive: true});
+			persons.current.addEventListener("scroll", throttle(toggleArrows), {passive: true});
 		}
 	}, [persons]);
 
@@ -61,13 +60,6 @@ export default function App(): JSX.Element {
 			setHasLeft(persons.current.scrollLeft - padding > 0);
 		}
 	}
-
-	// function updateTop() {
-	// 	if (persons.current && leftArrow.current && rightArrow.current) {
-	// 		leftArrow.current.style.top = `${10 - persons.current.scrollTop}px`;
-	// 		rightArrow.current.style.top = `${10 - persons.current.scrollTop}px`;
-	// 	}
-	// }
 
 	function scrollLeft() {
 		if (persons.current) {
