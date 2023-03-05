@@ -65,9 +65,10 @@ export default function Search({search, name}: SearchProps): JSX.Element {
 
 			return p.firstName.toLowerCase().startsWith(terms[0]) || p.lastName.toLowerCase().startsWith(terms[0]);
 		}).map(p => ({
+			club: data.clubs[p.clubId].name,
 			id: p.personId,
 			name: `${p.firstName} ${p.lastName}`,
-		})).sort((a, b) => a.name.localeCompare(b.name)));
+		})).sort((a, b) => a.club.localeCompare(b.club) || a.name.localeCompare(b.name)));
 	}
 
 	function changeCheckbox(id: number) {
@@ -80,15 +81,26 @@ export default function Search({search, name}: SearchProps): JSX.Element {
 		};
 	}
 
+	let club = "";
+
 	return (
 		<div className="names">
 			<h2>Pick your Athletes:</h2>
 			<ul>
 				{!people ? null : people.map(p => {
+
+					const newClub = p.club || "";
+					const displayClub = club !== newClub;
+					club = newClub;
 					return (
-						<li className="names-checkbox" key={p.name}>
-							<label><input type="checkbox" checked={checked.includes(p.id)} onChange={changeCheckbox(p.id)} />{p.name}</label>
-						</li>
+						<>
+							{
+								!displayClub ? null : <li className="club" key={p.club}><h1>{p.club}</h1></li>
+							}
+							<li className="names-checkbox" key={p.name}>
+								<label><input type="checkbox" checked={checked.includes(p.id)} onChange={changeCheckbox(p.id)} />{p.name}</label>
+							</li>
+						</>
 					);
 				})}
 			</ul>
