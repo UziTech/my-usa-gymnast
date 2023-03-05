@@ -8,6 +8,7 @@ import {
 import names from "./names.json";
 import SearchBox from "./SearchBox";
 import FilterBox from "./FilterBox";
+import { fetchJson } from "./fetchJson";
 
 function changeIds(ids: number[]) {
 	return () => {
@@ -21,12 +22,8 @@ export default function Search({search, name}: SearchProps): JSX.Element {
 	const [checked, setChecked] = useState<number[]>([]);
 	const { value: data, error, loading } = useAsync<() => Promise<sanctionData | undefined>>(async () => {
 		if (search) {
-			const response = await fetch(`https://uzitech.com/cbp/?url=https://api.myusagym.com/v2/sanctions/${search}`, {
-				headers: { accept: "application/json" },
-			});
-			if (response.ok) {
-				return await response.json() as sanctionData;
-			}
+			const response = await fetchJson<[sanctionData]>([[`https://uzitech.com/cbp/?url=https://api.myusagym.com/v2/sanctions/${search}`, true]]);
+			return response?.[0];
 		}
 	});
 
@@ -63,7 +60,7 @@ export default function Search({search, name}: SearchProps): JSX.Element {
 
 			return p.firstName.toLowerCase().startsWith(terms[0]) || p.lastName.toLowerCase().startsWith(terms[0]);
 		}).map(p => ({
-			club: data.clubs[p.clubId].name,
+			club: data.clubs[p.clubId]?.name || "",
 			id: p.personId,
 			name: `${p.firstName} ${p.lastName}`,
 		})).sort((a, b) => a.club.localeCompare(b.club) || a.name.localeCompare(b.name)));
