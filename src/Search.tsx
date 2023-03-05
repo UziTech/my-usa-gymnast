@@ -81,29 +81,36 @@ export default function Search({search, name}: SearchProps): JSX.Element {
 		};
 	}
 
-	let club = "";
+	const clubs = !people ? null : people.reduce((prev, p) => {
+		const club = p.club ?? "";
+		if (!(club in prev)) {
+			prev[club] = [];
+		}
+		prev[club].push(p);
+		return prev;
+	}, {} as {
+		[index: string]: peopleData[]
+	});
 
 	return (
 		<div className="names">
 			<h2>Pick your Athletes:</h2>
-			<ul>
-				{!people ? null : people.map(p => {
-
-					const newClub = p.club || "";
-					const displayClub = club !== newClub;
-					club = newClub;
-					return (
-						<>
+			{!clubs ? null : Object.keys(clubs).map(c => {
+				return (
+					<div key={c}>
+						<h3>{c}</h3>
+						<ul>
 							{
-								!displayClub ? null : <li className="club" key={p.club}><h1>{p.club}</h1></li>
+								clubs[c].map(p => (
+										<li className="names-checkbox" key={p.name}>
+											<label><input type="checkbox" checked={checked.includes(p.id)} onChange={changeCheckbox(p.id)} />{p.name}</label>
+										</li>
+								))
 							}
-							<li className="names-checkbox" key={p.name}>
-								<label><input type="checkbox" checked={checked.includes(p.id)} onChange={changeCheckbox(p.id)} />{p.name}</label>
-							</li>
-						</>
-					);
-				})}
-			</ul>
+						</ul>
+					</div>
+				)
+			})}
 			<button onClick={changeIds(checked)}>Go</button>
 			<div style={{display: "hidden"}}>
 				<h2>or search</h2>
