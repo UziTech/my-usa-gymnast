@@ -77,10 +77,24 @@ function isToday(startDate: string, endDate: string) {
 	return false;
 }
 
-async function fetchJson<T>(urls: string[]): Promise<T | undefined> {
-	const responses = await Promise.all(urls.map(url => fetch(url, {
-		headers: { accept: "application/json" },
-	}).then(r => r.ok && r.json())));
+const cache: {[index: string]: any} = {};
+
+async function fetchJson<T>(urls: Array<string | [string, true]>): Promise<T | undefined> {
+	const responses = await Promise.all(urls.map(async (url) => {
+		function fetchUrl(u: string) {
+			return fetch(u, {
+				headers: { accept: "application/json" },
+			}).then(r => r.ok && r.json())
+		}
+		if (Array.isArray(url)) {
+			if (!cache[url[0]]) {
+				cache[url[0]] = await fetchUrl(url[0]);
+			}
+			return cache[url[0]];
+		}
+
+		return fetchUrl(url);
+	}));
 	// only return data if all urls succeeded
 	if (responses.every(Boolean)) {
 		return responses as T;
@@ -120,7 +134,7 @@ export default function Sanction({name, startDate, endDate, personId, id}: Sanct
 	const {value: data, error, loading, retry} = useAsyncRetry<[sanctionData, personData] | undefined>(async () => {
 		if (loaded && id && personId) {
 			return await fetchJson<[sanctionData, personData]>([
-				`https://uzitech.com/cbp/?url=https://api.myusagym.com/v2/sanctions/${id}`,
+				[`https://uzitech.com/cbp/?url=https://api.myusagym.com/v2/sanctions/${id}`, true],
 				`https://uzitech.com/cbp/?url=https://api.myusagym.com/v2/people/${personId}`,
 			]);
 		}
