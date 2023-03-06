@@ -77,6 +77,18 @@ export default function Search({search}: SearchProps): JSX.Element {
 	return (
 		<div className="names">
 			<FilterBox onChange={setFilter} />
+			<div>
+				<br />
+				<a href={`https://myusagym.com/meets/live/${search}/`}>{data.sanction.name}</a>
+				<br />
+				<br/>
+				<a className="siteName" href={data.sanction.siteLink || `https://google.com/search?q=${encodeURIComponent(data.sanction.siteName)}`}>{data.sanction.siteName}</a>
+				<br />
+				<br/>
+				<a className="siteAddress" href={`https://maps.google.com?q=${encodeURIComponent(`${data.sanction.address1}, ${data.sanction.city}, ${data.sanction.state} ${data.sanction.zip}`)}`}>
+					{data.sanction.address1}, {data.sanction.city}, {data.sanction.state} {data.sanction.zip}
+				</a>
+			</div>
 			<h2>Pick your Athletes:</h2>
 			{!clubs ? null : Object.keys(clubs).map(c => {
 				return (
