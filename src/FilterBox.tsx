@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export default function Search({onChange}: {onChange: (value: string) => void}): JSX.Element {
+export default function Search({onChange}: {onChange: (value: string) => void}) {
 	const [inputValue, setInputValue] = useState<string>("");
 
   function change(e: React.ChangeEvent<HTMLInputElement>) {

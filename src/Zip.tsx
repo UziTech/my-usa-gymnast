@@ -50,11 +50,11 @@ function distance(zipFrom: string, zip: string) {
 	return d;
 }
 // get zip from location
-export default function Zip({zipCode}: ZipProps): JSX.Element {
+export default function Zip({zipCode}: ZipProps) {
 	const [zip, setZip] = useState<string>(zipCode);
 	const zipFrom = zip.match(/^\d{5}$/) ? findClosestZip(zip) : undefined;
 	console.log(zipFrom);
-	
+
 
 	useEffect(() => {
 		if (zipFrom && zipFrom !== zip) {

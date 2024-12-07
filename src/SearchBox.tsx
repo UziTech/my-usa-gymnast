@@ -4,7 +4,7 @@ function onSearch(q: string) {
 	window.location.href = `?${q.match(/^\d{5}$/) ? "zip" : "s"}=${q}`;
 }
 
-export default function Search(): JSX.Element {
+export default function Search() {
 	const [inputValue, setInputValue] = useState<string>("");
 
 	return (

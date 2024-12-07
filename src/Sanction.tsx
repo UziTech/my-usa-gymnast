@@ -104,7 +104,7 @@ function isEqual(s1: string, s2: string) {
 	);
 }
 
-export default function Sanction({name, startDate, endDate, personId, id}: SanctionProps): JSX.Element {
+export default function Sanction({name, startDate, endDate, personId, id}: SanctionProps) {
 	const [loaded, setLoaded] = useState(false);
   const [appContext, setAppContext] = useContext(AppContext);
 
@@ -127,7 +127,7 @@ export default function Sanction({name, startDate, endDate, personId, id}: Sanct
 		setLoaded(true);
 
 		retry();
-		
+
 		setAppContext(prevContext => ({
 			...prevContext,
 			[id]: {

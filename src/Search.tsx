@@ -15,7 +15,7 @@ function changeIds(ids: number[]) {
 	};
 }
 
-export default function Search({search}: SearchProps): JSX.Element {
+export default function Search({search}: SearchProps) {
 	const [filter, setFilter] = useState<string>("");
 	const [checked, setChecked] = useState<number[]>([]);
 	const { value: data, error, loading } = useAsync<() => Promise<sanctionData | undefined>>(async () => {

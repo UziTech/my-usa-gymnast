@@ -15,7 +15,7 @@ function renderEvent(s: sanctionResult) {
 	);
 }
 
-export default function SearchSanction({initialPast}: {initialPast: boolean}): JSX.Element {
+export default function SearchSanction({initialPast}: {initialPast: boolean}) {
 	const [filter, setFilter] = useState<string>("");
 	const [past, setPast] = useState<boolean>(initialPast);
 	const [loaded, setLoaded] = useState<boolean>(false);
@@ -49,7 +49,7 @@ export default function SearchSanction({initialPast}: {initialPast: boolean}): J
 		);
 	}
 	const myFilter = filter.split(":", 2);
-	
+
 	const sanctions = !filter ? data : data.filter(d => {
 		if (myFilter.length > 1 && myFilter[0] in d) {
 			return String(d[myFilter[0] as keyof sanctionResult]).toLocaleLowerCase().includes(String(myFilter[1]).toLocaleLowerCase())

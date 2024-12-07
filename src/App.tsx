@@ -39,7 +39,7 @@ function render(children: ReactElement) {
 	)
 }
 
-export default function App(): JSX.Element {
+export default function App() {
 	const [hasLeft, setHasLeft] = useState(false);
 	const [hasRight, setHasRight] = useState(false);
 	const persons = useRef<HTMLDivElement>(null);

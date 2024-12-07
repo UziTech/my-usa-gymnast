@@ -5,7 +5,7 @@ import {
 	personData,
 } from "./types";
 
-export default function Person({id}: PersonProps): JSX.Element {
+export default function Person({id}: PersonProps) {
 	const {value: data, error, loading} = useAsync<() => Promise<personData | undefined>>(async () => {
 		if (id) {
 			const response = await fetch(`https://uzitech.com/cbp/?url=https://api.myusagym.com/v2/people/${id}`, {
