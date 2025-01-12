@@ -5,8 +5,8 @@
   "private": true,
   "dependencies": {
     "@types/node": "^22.10.5",
-    "@types/react": "^19.0.3",
-    "@types/react-dom": "^19.0.2",
+    "@types/react": "^19.0.5",
+    "@types/react-dom": "^19.0.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-scripts": "5.0.1",
